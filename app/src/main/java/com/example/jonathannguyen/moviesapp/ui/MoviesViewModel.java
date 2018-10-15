@@ -1,4 +1,4 @@
-package com.example.jonathannguyen.moviesapp;
+package com.example.jonathannguyen.moviesapp.ui;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -6,11 +6,18 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
+import com.example.jonathannguyen.moviesapp.api.model.Genres;
+import com.example.jonathannguyen.moviesapp.api.model.Movies;
+import com.example.jonathannguyen.moviesapp.repository.MoviesRepository;
+import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
+import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
+import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
+
 import java.util.List;
 
 public class MoviesViewModel extends AndroidViewModel {
     private MutableLiveData<List<Movies>> mMovies = new MutableLiveData<>();
-    private MutableLiveData <List<Genres>> mGenres  = new MutableLiveData<>();
+    private MutableLiveData<List<Genres>> mGenres  = new MutableLiveData<>();
     private MoviesRepository moviesRepository;
     private TheMovieDbService api;
 

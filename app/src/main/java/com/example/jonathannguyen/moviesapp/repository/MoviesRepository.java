@@ -1,7 +1,13 @@
-package com.example.jonathannguyen.moviesapp;
+package com.example.jonathannguyen.moviesapp.repository;
 
 import android.app.Application;
 import android.util.Log;
+
+import com.example.jonathannguyen.moviesapp.api.model.GenresResponse;
+import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
+import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
+import com.example.jonathannguyen.moviesapp.api.model.MoviesResponse;
+import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -13,11 +19,10 @@ public class MoviesRepository {
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static final String LANGUAGE = "en-US";
     private static final String API_KEY = "e5c29049ee97d4ff4783f528930be86e";
-    private static MoviesRepository repository;
+    public static MoviesRepository repository;
     private TheMovieDbService theMovieDbService;
 
-    MoviesRepository(Application application,TheMovieDbService api){
-        //repository.getInstance(application);
+    public MoviesRepository(Application application,TheMovieDbService api){
         theMovieDbService = api;
     }
 
@@ -40,7 +45,6 @@ public class MoviesRepository {
                         if(response.isSuccessful()){
                             MoviesResponse moviesResponse = response.body();
                             if(moviesResponse != null && moviesResponse.getMovies() != null) {
-                                //mMovies.postValue(moviesResponse.getMovies());
                                 callback.onSuccess(moviesResponse.getMovies());
                             } else {
                                 callback.onError();

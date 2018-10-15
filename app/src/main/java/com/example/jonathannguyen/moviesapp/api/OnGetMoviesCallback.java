@@ -1,4 +1,6 @@
-package com.example.jonathannguyen.moviesapp;
+package com.example.jonathannguyen.moviesapp.api;
+
+import com.example.jonathannguyen.moviesapp.api.model.Movies;
 
 import java.util.List;
 

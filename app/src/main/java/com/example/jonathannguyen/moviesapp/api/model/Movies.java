@@ -1,9 +1,10 @@
-package com.example.jonathannguyen.moviesapp;
+package com.example.jonathannguyen.moviesapp.api.model;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 
+import com.example.jonathannguyen.moviesapp.utils.Converters;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

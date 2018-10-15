@@ -1,4 +1,4 @@
-package com.example.jonathannguyen.moviesapp;
+package com.example.jonathannguyen.moviesapp.ui;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.jonathannguyen.moviesapp.R;
+import com.example.jonathannguyen.moviesapp.api.model.Genres;
+import com.example.jonathannguyen.moviesapp.api.model.Movies;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +23,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     private List<Genres> allGenres;
     private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
 
-    public MoviesAdapter(){//List<Movies> movies,List<Genres> allGenres){
-//        this.movies = movies;
-//        this.allGenres = allGenres;
-    }
+    public MoviesAdapter(){}
 
     public void setMovies(List<Movies> movies){
         this.movies = movies;
@@ -92,4 +92,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         }
 
     }
+
+
 }

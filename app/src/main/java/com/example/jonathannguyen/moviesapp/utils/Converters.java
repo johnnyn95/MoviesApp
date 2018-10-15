@@ -1,4 +1,4 @@
-package com.example.jonathannguyen.moviesapp;
+package com.example.jonathannguyen.moviesapp.utils;
 
 import android.arch.persistence.room.TypeConverter;
 
