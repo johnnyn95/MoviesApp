@@ -15,17 +15,19 @@ import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 
 import java.util.List;
 
-public class MoviesViewModel extends AndroidViewModel {
+public class MoviesViewModel extends AndroidViewModel  {
     private MutableLiveData<List<Movies>> mMovies = new MutableLiveData<>();
     private MutableLiveData<List<Genres>> mGenres  = new MutableLiveData<>();
+    private MutableLiveData<Integer> mLastPosition = new MutableLiveData<>();
     private MoviesRepository moviesRepository;
     private TheMovieDbService api;
-
 
     public MoviesViewModel(Application application){
         super(application);
         moviesRepository = new MoviesRepository(application,api);
     }
+
+
 
     public void getPopularMovies(){
         moviesRepository = MoviesRepository.getInstance(getApplication());
@@ -59,7 +61,24 @@ public class MoviesViewModel extends AndroidViewModel {
         return mMovies;
     }
 
-    public LiveData<List<Genres>> getmGenres() {
-        return mGenres;
+    public LiveData<List<Genres>> getmGenres() { return mGenres; }
+
+    public MutableLiveData<Integer> getmLastPosition(){return mLastPosition; }
+
+    public void setmLastPosition(MutableLiveData<Integer> mLastPosition) {
+        this.mLastPosition = mLastPosition;
+    }
+
+    public void addMovieToFavourites(Movies movie){
+        // TODO add movie to favourites db
+
+    }
+
+    public void openMovieDetails(Movies movie){
+        // TODO open new activity with movie details
+
+    }
+    public void getLastAdapterPosition(Integer position){
+        mLastPosition.postValue(position);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.jonathannguyen.moviesapp.ui;
 
+import android.graphics.Movie;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,12 +19,15 @@ import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder> {
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewHolder>  {
     private List<Movies> movies;
     private List<Genres> allGenres;
     private String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w500";
+    private final MoviesAdapterOnClickHandler moviesAdapterOnClickHandler;
 
-    public MoviesAdapter(){}
+    public MoviesAdapter(MoviesAdapterOnClickHandler moviesAdapterOnClickHandler){
+        this.moviesAdapterOnClickHandler = moviesAdapterOnClickHandler;
+    }
 
     public void setMovies(List<Movies> movies){
         this.movies = movies;
@@ -34,30 +38,31 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
     @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public MovieViewHolder onCreateViewHolder(ViewGroup viewGroup, int i)  {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.movies_list_item,viewGroup,false);
         return new MovieViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieViewHolder movieViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MovieViewHolder movieViewHolder, int i){
         movieViewHolder.bind(movies.get(i));
     }
 
     @Override
     public int getItemCount() {
-        if(movies !=null ){
+        if(movies != null ){
         return movies.size();
         } else return 0;
     }
 
-    class MovieViewHolder extends RecyclerView.ViewHolder{
+    class MovieViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView releaseDate;
         TextView title;
         TextView rating;
         TextView genres;
         ImageView poster;
+        ImageView favourite;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
@@ -66,6 +71,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             rating = itemView.findViewById(R.id.item_movie_rating);
             genres = itemView.findViewById(R.id.item_movie_genre);
             poster = itemView.findViewById(R.id.item_movie_poster);
+            favourite = itemView.findViewById(R.id.item_movie_favourite);
+            favourite.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         public void bind(Movies movie){
@@ -91,7 +99,17 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             return TextUtils.join(", ", movieGenres);
         }
 
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Movies movie = movies.get(position);
+            if(movie != null) {
+                if (v == favourite) {
+                    moviesAdapterOnClickHandler.addToFavourites(movie);
+                } else {
+                    moviesAdapterOnClickHandler.movieDetails(movie);
+                }
+            }
+        }
     }
-
-
 }
