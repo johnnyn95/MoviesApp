@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 moviesViewModel.getPopularMovies();
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, R.string.refresh_popular_movies, Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                 recyclerView.setAdapter(adapter);
             }
         });
+        moviesViewModel.getPopularMovies();
     }
 
     @Override
