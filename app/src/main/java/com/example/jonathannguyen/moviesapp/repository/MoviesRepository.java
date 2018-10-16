@@ -86,4 +86,27 @@ public class MoviesRepository {
                 });
     }
 
+    public void getPopularMoviesNextPage(final OnGetMoviesCallback callback,int page){
+        theMovieDbService.getPopular(API_KEY,LANGUAGE,page)
+                .enqueue(new Callback<MoviesResponse>() {
+                    @Override
+                    public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                        if(response.isSuccessful()){
+                            MoviesResponse moviesResponse = response.body();
+                            if(moviesResponse != null && moviesResponse.getMovies() != null) {
+                                callback.onSuccess(moviesResponse.getMovies());
+                            } else {
+                                callback.onError();
+                            }
+                        } else {
+                            callback.onError();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                        Log.d(MoviesRepository.class.toString(),"Failed to get movies");
+                        callback.onError();
+                    }
+                });
+    }
 }

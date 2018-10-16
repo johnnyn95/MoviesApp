@@ -13,6 +13,7 @@ import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
 import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
 import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MoviesViewModel extends AndroidViewModel  {
@@ -21,6 +22,7 @@ public class MoviesViewModel extends AndroidViewModel  {
     private MutableLiveData<Integer> mLastPosition = new MutableLiveData<>();
     private MoviesRepository moviesRepository;
     private TheMovieDbService api;
+    int currentPopularPage = 1;
 
     public MoviesViewModel(Application application){
         super(application);
@@ -57,6 +59,26 @@ public class MoviesViewModel extends AndroidViewModel  {
         });
     }
 
+    public void getPopularMoviesNextPage(){
+        currentPopularPage++;
+        moviesRepository = MoviesRepository.getInstance(getApplication());
+        moviesRepository.getPopularMoviesNextPage(new OnGetMoviesCallback() {
+            @Override
+            public void onSuccess(List<Movies> movies) {
+                if(movies != null) {
+                    List<Movies> newList = new ArrayList<Movies>(getmMovies().getValue());
+                    newList.addAll(movies);
+                    mMovies.postValue(newList);
+                }
+            }
+
+            @Override
+            public void onError() {
+                Log.d(MoviesRepository.class.toString(),"Failed to fetch movies");
+            }
+        },currentPopularPage);
+    }
+
     public LiveData<List<Movies>> getmMovies() {
         return mMovies;
     }
@@ -64,6 +86,8 @@ public class MoviesViewModel extends AndroidViewModel  {
     public LiveData<List<Genres>> getmGenres() { return mGenres; }
 
     public LiveData<Integer> getmLastPosition(){ return mLastPosition; }
+
+
 
     public void addMovieToFavourites(Movies movie){
         // TODO add movie to favourites db
