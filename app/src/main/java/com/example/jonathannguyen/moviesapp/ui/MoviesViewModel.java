@@ -65,10 +65,6 @@ public class MoviesViewModel extends AndroidViewModel  {
 
     public LiveData<Integer> getmLastPosition(){ return mLastPosition; }
 
-    public void setmLastPosition(MutableLiveData<Integer> mLastPosition) {
-        this.mLastPosition = mLastPosition;
-    }
-
     public void addMovieToFavourites(Movies movie){
         // TODO add movie to favourites db
 

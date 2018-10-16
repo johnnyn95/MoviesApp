@@ -89,6 +89,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
         super.onViewCreated(view, savedInstanceState);
         recyclerView = getView().findViewById(R.id.recyclerview);
         FloatingActionButton fab = getView().findViewById(R.id.fab);
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,6 +102,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
         moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
+
         moviesViewModel.getmMovies().observe(this, new Observer<List<Movies>>(){
             @Override
             public void onChanged(@Nullable List<Movies> movies) {
@@ -178,7 +180,6 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        if(moviesViewModel.getmLastPosition() != null) {
           if(layoutManager.findFirstVisibleItemPosition() != 0) {
             moviesViewModel.setLastAdapterPosition(layoutManager.findFirstVisibleItemPosition());
        }
