@@ -1,52 +1,38 @@
 package com.example.jonathannguyen.moviesapp.ui;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.example.jonathannguyen.moviesapp.api.model.Movies;
+
 import com.example.jonathannguyen.moviesapp.R;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
         PopularMoviesFragment.OnFragmentInteractionListener,
         SearchMoviesFragment.OnFragmentInteractionListener,
         FavouriteMoviesFragment.OnFragmentInteractionListener {
 
-    RecyclerView recyclerView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        recyclerView = findViewById(R.id.recyclerview);
-        setSupportActionBar(toolbar);
 
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         final ViewPager viewPager = findViewById(R.id.viewpager);
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        setSupportActionBar(toolbar);
         MoviesAppPagerAdapter pagerAdapter = new MoviesAppPagerAdapter(this,getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

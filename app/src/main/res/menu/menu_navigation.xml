@@ -14,5 +14,5 @@
         android:id="@+id/nav_favourites"
         android:title="@string/fragment_favourites"
         android:icon="@drawable/ic_star_black_24dp"
-        android:iconTint="@color/colorAccent"/>
+        android:iconTint="@color/colorAccent" />
 </menu>

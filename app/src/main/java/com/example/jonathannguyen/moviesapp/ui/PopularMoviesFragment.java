@@ -3,6 +3,7 @@ package com.example.jonathannguyen.moviesapp.ui;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -88,14 +90,20 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = getView().findViewById(R.id.recyclerview);
-        FloatingActionButton fab = getView().findViewById(R.id.fab);
+        final FloatingActionButton fab = getView().findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                moviesViewModel.setLastAdapterPosition(0);
                 moviesViewModel.getPopularMovies();
-                Snackbar.make(view, R.string.refresh_popular_movies, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+                fab.hide();
+                Snackbar snackbar = Snackbar.make(view, R.string.refresh_popular_movies, Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null);
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                snackbar.show();
+                recyclerView.scrollToPosition(0);
             }
         });
 
@@ -121,6 +129,22 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
             @Override
             public void onChanged(@Nullable Integer integer) {
                 recyclerView.scrollToPosition(moviesViewModel.getmLastPosition().getValue());
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0 && fab.getVisibility() == View.VISIBLE) {
+                    fab.hide();
+                } else if (dy < 0 && fab.getVisibility() != View.VISIBLE) {
+                    fab.show();
+                }
             }
         });
         moviesViewModel.getPopularMovies();
@@ -183,6 +207,5 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
           if(layoutManager.findFirstVisibleItemPosition() != 0) {
             moviesViewModel.setLastAdapterPosition(layoutManager.findFirstVisibleItemPosition());
        }
-
     }
 }
