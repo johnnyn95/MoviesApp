@@ -38,6 +38,19 @@ public class Movies {
     @Expose
     private List<Integer> genreIds;
 
+    @SerializedName("overview")
+    @Expose
+    private String overview;
+
+    @SerializedName("backdrop_path")
+    @Expose
+    private String backdrop;
+
+    @SerializedName("genres")
+    @Expose
+    private List<Genres> genres;
+
+
     public int getId() {
         return id;
     }
@@ -84,5 +97,29 @@ public class Movies {
 
     public void setGenreIds(List<Integer> genreIds) {
         this.genreIds = genreIds;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
+    }
+
+    public String getBackdrop() {
+        return backdrop;
+    }
+
+    public void setBackdrop(String backdrop) {
+        this.backdrop = backdrop;
+    }
+
+    public List<Genres> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<Genres> genres) {
+        this.genres = genres;
     }
 }

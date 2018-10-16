@@ -1,10 +1,13 @@
 package com.example.jonathannguyen.moviesapp.api;
 
 import com.example.jonathannguyen.moviesapp.api.model.GenresResponse;
+import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.model.MoviesResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface TheMovieDbService {
@@ -22,4 +25,9 @@ public interface TheMovieDbService {
                                                        @Query("language") String language,
                                                        @Query("page") int page,
                                                        @Query("query") String searchQuery);
+    @GET("movie/{movie_id}")
+    Call<Movies> getMovie(
+            @Path("movie_id") int id,
+            @Query("api_key") String apiKey,
+            @Query("language") String language);
 }

@@ -6,8 +6,10 @@ import android.util.Log;
 import com.example.jonathannguyen.moviesapp.api.model.GenresResponse;
 import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
 import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
+import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.model.MoviesResponse;
 import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
+import com.example.jonathannguyen.moviesapp.api.OnGetMovieCallback;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -105,6 +107,30 @@ public class MoviesRepository {
                     @Override
                     public void onFailure(Call<MoviesResponse> call, Throwable t) {
                         Log.d(MoviesRepository.class.toString(),"Failed to get movies");
+                        callback.onError();
+                    }
+                });
+    }
+
+    public void getMovie(int movieId, final OnGetMovieCallback callback) {
+        theMovieDbService.getMovie(movieId, API_KEY, LANGUAGE)
+                .enqueue(new Callback<Movies>() {
+                    @Override
+                    public void onResponse(Call<Movies> call, Response<Movies> response) {
+                        if (response.isSuccessful()) {
+                            Movies movie = response.body();
+                            if (movie != null) {
+                                callback.onSuccess(movie);
+                            } else {
+                                callback.onError();
+                            }
+                        } else {
+                            callback.onError();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Movies> call, Throwable t) {
                         callback.onError();
                     }
                 });

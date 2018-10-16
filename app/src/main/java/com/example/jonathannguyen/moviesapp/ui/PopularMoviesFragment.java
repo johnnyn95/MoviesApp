@@ -3,7 +3,9 @@ package com.example.jonathannguyen.moviesapp.ui;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Movie;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -200,8 +202,9 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
 
     @Override
     public void movieDetails(Movies movie) {
-        // TODO open new activity with movie details
-        Log.d("fav movie details",movie.getTitle());
+        Intent intent = new Intent(getActivity(),MovieDetails.class);
+        intent.putExtra(getString(R.string.EXTRA_MOVIE_ID),movie.getId());
+        startActivity(intent);
     }
 
     /**
@@ -222,8 +225,6 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-          if(layoutManager.findFirstVisibleItemPosition() != 0) {
-            moviesViewModel.setLastAdapterPosition(layoutManager.findFirstVisibleItemPosition());
-       }
+        moviesViewModel.setLastAdapterPosition(layoutManager.findFirstVisibleItemPosition());
     }
 }

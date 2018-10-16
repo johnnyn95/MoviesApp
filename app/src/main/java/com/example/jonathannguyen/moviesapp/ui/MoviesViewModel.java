@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
+import com.example.jonathannguyen.moviesapp.api.OnGetMovieCallback;
 import com.example.jonathannguyen.moviesapp.repository.MoviesRepository;
 import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
 import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
@@ -20,6 +21,8 @@ public class MoviesViewModel extends AndroidViewModel  {
     private MutableLiveData<List<Movies>> mMovies = new MutableLiveData<>();
     private MutableLiveData<List<Genres>> mGenres  = new MutableLiveData<>();
     private MutableLiveData<Integer> mLastPosition = new MutableLiveData<>();
+    private MutableLiveData<Movies> mMovieDetails = new MutableLiveData<>();
+
     private MoviesRepository moviesRepository;
     private TheMovieDbService api;
     int currentPopularPage = 1;
@@ -79,14 +82,28 @@ public class MoviesViewModel extends AndroidViewModel  {
         },currentPopularPage);
     }
 
-    public LiveData<List<Movies>> getmMovies() {
-        return mMovies;
+    public void getMovieDetails(int movieId){
+        moviesRepository = MoviesRepository.getInstance(getApplication());
+        moviesRepository.getMovie(movieId, new OnGetMovieCallback() {
+            @Override
+            public void onSuccess(Movies movie) {
+                mMovieDetails.postValue(movie);
+            }
+
+            @Override
+            public void onError() {
+                Log.d(MoviesRepository.class.toString(),"Failed to fetch movie");
+            }
+        });
     }
 
-    public LiveData<List<Genres>> getmGenres() { return mGenres; }
+    public LiveData<List<Movies>> getmMovies(){ return mMovies; }
+
+    public LiveData<List<Genres>> getmGenres(){ return mGenres; }
 
     public LiveData<Integer> getmLastPosition(){ return mLastPosition; }
 
+    public LiveData<Movies> getmMovieDetails(){ return mMovieDetails; }
 
 
     public void addMovieToFavourites(Movies movie){
@@ -94,10 +111,6 @@ public class MoviesViewModel extends AndroidViewModel  {
 
     }
 
-    public void openMovieDetails(Movies movie){
-        // TODO open new activity with movie details
-
-    }
     public void setLastAdapterPosition(Integer position){
         mLastPosition.postValue(position);
     }
