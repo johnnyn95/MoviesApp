@@ -63,7 +63,7 @@ public class MoviesViewModel extends AndroidViewModel  {
 
     public LiveData<List<Genres>> getmGenres() { return mGenres; }
 
-    public MutableLiveData<Integer> getmLastPosition(){return mLastPosition; }
+    public LiveData<Integer> getmLastPosition(){ return mLastPosition; }
 
     public void setmLastPosition(MutableLiveData<Integer> mLastPosition) {
         this.mLastPosition = mLastPosition;
@@ -78,7 +78,7 @@ public class MoviesViewModel extends AndroidViewModel  {
         // TODO open new activity with movie details
 
     }
-    public void getLastAdapterPosition(Integer position){
+    public void setLastAdapterPosition(Integer position){
         mLastPosition.postValue(position);
     }
 }

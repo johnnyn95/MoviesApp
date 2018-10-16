@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_popular"
+        android:title="@string/fragment_popular"
+        android:icon="@drawable/ic_whatshot_black_24dp"
+        android:iconTint="@color/colorAccent"/>
+    <item
+        android:id="@+id/nav_search"
+        android:title="@string/fragment_search"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:iconTint="@color/colorAccent"/>
+    <item
+        android:id="@+id/nav_favourites"
+        android:title="@string/fragment_favourites"
+        android:icon="@drawable/ic_star_black_24dp"
+        android:iconTint="@color/colorAccent"/>
+</menu>

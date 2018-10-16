@@ -2,12 +2,17 @@ package com.example.jonathannguyen.moviesapp.ui;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,10 +27,11 @@ import com.example.jonathannguyen.moviesapp.R;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapterOnClickHandler {
-    private MoviesViewModel moviesViewModel;
-    MoviesAdapter adapter = new MoviesAdapter(this);
-    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+public class MainActivity extends AppCompatActivity implements
+        PopularMoviesFragment.OnFragmentInteractionListener,
+        SearchMoviesFragment.OnFragmentInteractionListener,
+        FavouriteMoviesFragment.OnFragmentInteractionListener {
+
     RecyclerView recyclerView;
 
     @Override
@@ -36,44 +42,28 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapterOnCl
         recyclerView = findViewById(R.id.recyclerview);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        final ViewPager viewPager = findViewById(R.id.viewpager);
+        MoviesAppPagerAdapter pagerAdapter = new MoviesAppPagerAdapter(this,getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+        //TabLayout tabLayout = findViewById(R.id.tablayout);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                moviesViewModel.getPopularMovies();
-                Snackbar.make(view, R.string.refresh_popular_movies, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
-            }
-        });
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(layoutManager);
-
-        moviesViewModel = new MoviesViewModel(getApplication());
-        moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
-        moviesViewModel.getmMovies().observe(this, new Observer<List<Movies>>(){
-            @Override
-            public void onChanged(@Nullable List<Movies> movies) {
-                adapter.setMovies(movies);
-                adapter.setAllGenres(moviesViewModel.getmGenres().getValue());
-                recyclerView.setAdapter(adapter);
-                if(moviesViewModel.getmLastPosition().getValue() != null){
-                recyclerView.scrollToPosition(moviesViewModel.getmLastPosition().getValue());
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.nav_popular:
+                        viewPager.setCurrentItem(0);
+                        return true;
+                    case R.id.nav_search:
+                        viewPager.setCurrentItem(1);
+                        return true;
+                    case R.id.nav_favourites:
+                        viewPager.setCurrentItem(2);
+                        return true;
                 }
-
+                return false;
             }
         });
-        moviesViewModel.getmLastPosition().observe(this, new Observer<Integer>() {
-            @Override
-            public void onChanged(@Nullable Integer integer) {
-                recyclerView.scrollToPosition(moviesViewModel.getmLastPosition().getValue());
-            }
-        });
-        moviesViewModel.getPopularMovies();
-    }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        moviesViewModel.getLastAdapterPosition(layoutManager.findFirstVisibleItemPosition());
     }
 
     @Override
@@ -92,14 +82,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapterOnCl
     }
 
     @Override
-    public void addToFavourites(Movies movie) {
-        // TODO add movie to favourites db
-        Log.d("fav",movie.getTitle());
-    }
+    public void onFragmentInteraction(Uri uri) {
 
-    @Override
-    public void movieDetails(Movies movie) {
-        // TODO open new activity with movie details
-        Log.d("fav movie details",movie.getTitle());
     }
 }
