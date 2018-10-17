@@ -21,7 +21,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MovieDetails"></activity>
+        <activity android:name=".ui.MovieDetails"
+            android:parentActivityName=".ui.MainActivity" />
     </application>
 
 </manifest>

@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         MoviesAppPagerAdapter pagerAdapter = new MoviesAppPagerAdapter(this,getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
-
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

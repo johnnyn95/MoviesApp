@@ -3,6 +3,7 @@ package com.example.jonathannguyen.moviesapp.ui;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -72,7 +73,6 @@ public class MovieDetails extends AppCompatActivity {
         moviesViewModel.getMovieDetails(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
         moviesViewModel.getMovieTrailers(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
         moviesViewModel.getMovieReviews(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
-
     }
 
     private void initUI() {
@@ -88,7 +88,6 @@ public class MovieDetails extends AppCompatActivity {
         trailersLabel = findViewById(R.id.trailersLabel);
         reviewsLabel = findViewById(R.id.reviewsLabel);
     }
-
     private void setMovie(Movies movie) {
         movieTitle.setText(movie.getTitle());
         movieOverviewLabel.setVisibility(View.VISIBLE);
@@ -130,7 +129,6 @@ public class MovieDetails extends AppCompatActivity {
             movieTrailers.addView(parent);
         }
     }
-
     private void setMovieReviews(List<Reviews> reviews){
         reviewsLabel.setVisibility(View.VISIBLE);
         movieReviews.removeAllViews();
