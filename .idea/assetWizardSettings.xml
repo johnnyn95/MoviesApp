@@ -28,7 +28,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_star_black_24dp" />
+                            <entry key="color" value="ffda44" />
+                            <entry key="outputName" value="favourite" />
                             <entry key="sourceFile" value="C:\Users\jonathan.nguyen" />
                           </map>
                         </option>

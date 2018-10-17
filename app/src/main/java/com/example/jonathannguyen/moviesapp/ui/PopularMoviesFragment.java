@@ -41,7 +41,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
     private static final String ARG_PARAM2 = "param2";
     private MoviesViewModel moviesViewModel;
     MoviesAdapter adapter = new MoviesAdapter(this);
-    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+    //LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
     RecyclerView recyclerView;
     private boolean loading = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
@@ -109,7 +109,9 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
         });
 
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(layoutManager);
+        if(recyclerView.getLayoutManager() == null)
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
 
         moviesViewModel.getmMovies().observe(this, new Observer<List<Movies>>(){
@@ -148,9 +150,9 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
                 }
                 if(dy > 0) //check for scroll down
                 {
-                    visibleItemCount = layoutManager.getChildCount();
-                    totalItemCount = layoutManager.getItemCount();
-                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+                    visibleItemCount = getLinearLayoutManager(recyclerView).getChildCount();
+                    totalItemCount = getLinearLayoutManager(recyclerView).getItemCount();
+                    pastVisiblesItems = getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition();
 
                     if (loading)
                     {
@@ -160,7 +162,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
                             Log.v("...", "Last Item Wow !");
                             //Do pagination.. i.e. fetch new data
                             moviesViewModel.getPopularMoviesNextPage();
-                            moviesViewModel.setLastAdapterPosition(layoutManager.findFirstVisibleItemPosition());
+                            moviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
                         }
                     }
                     loading = true;
@@ -225,6 +227,10 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        moviesViewModel.setLastAdapterPosition(layoutManager.findFirstVisibleItemPosition());
+        moviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
+    }
+
+    private LinearLayoutManager getLinearLayoutManager(RecyclerView recyclerView){
+        return (LinearLayoutManager) recyclerView.getLayoutManager();
     }
 }

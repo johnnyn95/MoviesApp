@@ -3,6 +3,8 @@ package com.example.jonathannguyen.moviesapp.repository;
 import android.app.Application;
 import android.util.Log;
 
+import com.example.jonathannguyen.moviesapp.api.OnGetReviewsCallback;
+import com.example.jonathannguyen.moviesapp.api.OnGetTrailersCallback;
 import com.example.jonathannguyen.moviesapp.api.model.GenresResponse;
 import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
 import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
@@ -10,6 +12,9 @@ import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.model.MoviesResponse;
 import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 import com.example.jonathannguyen.moviesapp.api.OnGetMovieCallback;
+import com.example.jonathannguyen.moviesapp.api.model.ReviewsResponse;
+import com.example.jonathannguyen.moviesapp.api.model.Trailers;
+import com.example.jonathannguyen.moviesapp.api.model.TrailersResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -128,11 +133,57 @@ public class MoviesRepository {
                             callback.onError();
                         }
                     }
-
                     @Override
                     public void onFailure(Call<Movies> call, Throwable t) {
                         callback.onError();
                     }
                 });
     }
+
+    public void getReviews(int movieId, final OnGetReviewsCallback callback){
+        theMovieDbService.getReviews(movieId,API_KEY,LANGUAGE)
+                .enqueue(new Callback<ReviewsResponse>() {
+                    @Override
+                    public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
+                        if(response.isSuccessful()){
+                            ReviewsResponse reviewsResponse = response.body();
+                            if(reviewsResponse != null && reviewsResponse.getReviews() != null){
+                                callback.onSuccess(reviewsResponse.getReviews());
+                            } else {
+                                callback.onError();
+                            }
+                        } else {
+                            callback.onError();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<ReviewsResponse> call, Throwable t) {
+                        callback.onError();
+                    }
+                });
+    }
+
+    public void getTrailers(int movieId, final OnGetTrailersCallback callback) {
+        theMovieDbService.getTrailers(movieId,API_KEY, LANGUAGE)
+                .enqueue(new Callback<TrailersResponse>() {
+                    @Override
+                    public void onResponse(Call<TrailersResponse> call, Response<TrailersResponse> response) {
+                        if (response.isSuccessful()) {
+                            TrailersResponse trailerResponse = response.body();
+                            if (trailerResponse != null && trailerResponse.getTrailers() != null) {
+                                callback.onSuccess(trailerResponse.getTrailers());
+                            } else {
+                                callback.onError();
+                            }
+                        } else {
+                            callback.onError();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<TrailersResponse> call, Throwable t) {
+                        callback.onError();
+                    }
+                });
+    }
+
 }

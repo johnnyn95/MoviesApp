@@ -3,6 +3,8 @@ package com.example.jonathannguyen.moviesapp.api;
 import com.example.jonathannguyen.moviesapp.api.model.GenresResponse;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.model.MoviesResponse;
+import com.example.jonathannguyen.moviesapp.api.model.ReviewsResponse;
+import com.example.jonathannguyen.moviesapp.api.model.TrailersResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -30,4 +32,18 @@ public interface TheMovieDbService {
             @Path("movie_id") int id,
             @Query("api_key") String apiKey,
             @Query("language") String language);
+
+    @GET("movie/{movie_id}/videos")
+    Call<TrailersResponse> getTrailers(
+            @Path("movie_id") int id,
+            @Query("api_key") String apiKey,
+            @Query("language") String language
+    );
+
+    @GET("movie/{movie_id}/reviews")
+    Call<ReviewsResponse> getReviews(
+            @Path("movie_id") int id,
+            @Query("api_key") String apiKey,
+            @Query("language") String language
+    );
 }

@@ -24,7 +24,7 @@ public class MoviesAppPagerAdapter extends FragmentPagerAdapter {
             case 2:
                 return new FavouriteMoviesFragment();
                 default:
-                    return new PopularMoviesFragment();
+                    return null;
         }
     }
 
