@@ -32,6 +32,33 @@ public class MainActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         MoviesAppPagerAdapter pagerAdapter = new MoviesAppPagerAdapter(this,getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+            @Override
+            public void onPageSelected(int i) {
+                switch (i){
+                    case 0:
+                        bottomNavigationView.setSelectedItemId(R.id.nav_popular);
+                        break;
+                    case 1:
+                        bottomNavigationView.setSelectedItemId(R.id.nav_search);
+                        break;
+                    case 2:
+                        bottomNavigationView.setSelectedItemId(R.id.nav_favourites);
+                        break;
+                        default :
+                            bottomNavigationView.setSelectedItemId(R.id.nav_popular);
+                            break;
+                }
+            }
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {

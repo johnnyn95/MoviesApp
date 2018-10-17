@@ -26,59 +26,25 @@ import com.example.jonathannguyen.moviesapp.api.model.Movies;
 
 import java.util.List;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PopularMoviesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PopularMoviesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnClickHandler{
-    // TODO: Rename parameter arguments, choose names that match
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private MoviesViewModel moviesViewModel;
     MoviesAdapter adapter = new MoviesAdapter(this);
-    //LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
     RecyclerView recyclerView;
     private boolean loading = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
     public PopularMoviesFragment() { }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment PopularMoviesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static PopularMoviesFragment newInstance(String param1, String param2) {
+    public static PopularMoviesFragment newInstance() {
         PopularMoviesFragment fragment = new PopularMoviesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -159,8 +125,6 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
                         if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
                         {
                             loading = false;
-                            Log.v("...", "Last Item Wow !");
-                            //Do pagination.. i.e. fetch new data
                             moviesViewModel.getPopularMoviesNextPage();
                             moviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
                         }
