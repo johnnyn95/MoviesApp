@@ -1,5 +1,6 @@
 package com.example.jonathannguyen.moviesapp.ui;
 
+import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 
 import com.example.jonathannguyen.moviesapp.R;
@@ -26,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements
         final Toolbar toolbar = findViewById(R.id.toolbar);
         final ViewPager viewPager = findViewById(R.id.viewpager);
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-
         setSupportActionBar(toolbar);
         MoviesAppPagerAdapter pagerAdapter = new MoviesAppPagerAdapter(this,getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
@@ -94,5 +96,10 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

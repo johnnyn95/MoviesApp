@@ -1,78 +1,150 @@
 package com.example.jonathannguyen.moviesapp.ui;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.example.jonathannguyen.moviesapp.R;
+import com.example.jonathannguyen.moviesapp.api.model.Movies;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SearchMoviesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SearchMoviesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SearchMoviesFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import java.util.List;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnClickHandler {
+    private SearchMoviesViewModel searchMoviesViewModel;
+    MoviesAdapter adapter = new MoviesAdapter(this);
+    RecyclerView recyclerView;
+    EditText searchQuery;
+    FloatingActionButton fab;
+    AppBarLayout appBarLayout;
+    ImageButton clearSearchQuery;
+    private boolean loading = true;
+    int pastVisiblesItems, visibleItemCount, totalItemCount;
     private OnFragmentInteractionListener mListener;
 
     public SearchMoviesFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SearchMoviesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SearchMoviesFragment newInstance(String param1, String param2) {
+    public static SearchMoviesFragment newInstance() {
         SearchMoviesFragment fragment = new SearchMoviesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_search_movies, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        recyclerView = getView().findViewById(R.id.recyclerview_search);
+        searchQuery = getView().findViewById(R.id.search_query);
+        clearSearchQuery = getView().findViewById(R.id.clear_search_query);
+        appBarLayout = getView().findViewById(R.id.appBarLayout);
+        fab = getView().findViewById(R.id.fab_search);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(searchQuery.getText().toString() != "" && !TextUtils.isEmpty(searchQuery.getText().toString())){
+                    searchMoviesViewModel.getSearchMovies(searchQuery.getText().toString());
+                    fab.hide();
+                    appBarLayout.setExpanded(false,true);
+                } else {
+                    Snackbar snackbar = Snackbar
+                            .make(view, R.string.search_query_empty, Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null);
+                    View sbView = snackbar.getView();
+                    sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                    snackbar.show();
+                }
+            }
+        });
+        clearSearchQuery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchQuery.setText("");
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        if(recyclerView.getLayoutManager() == null){
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
+
+        searchMoviesViewModel = ViewModelProviders.of(this).get(SearchMoviesViewModel.class);
+        searchMoviesViewModel.getmMovies().observe(this, new Observer<List<Movies>>(){
+            @Override
+            public void onChanged(@Nullable List<Movies> movies) {
+                adapter.setMovies(movies);
+                adapter.setAllGenres(searchMoviesViewModel.getmGenres().getValue());
+                recyclerView.setAdapter(adapter);
+
+                if(searchMoviesViewModel.getmLastPosition().getValue() != null){
+                    recyclerView.scrollToPosition(searchMoviesViewModel.getmLastPosition().getValue());
+                }
+
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0 && fab.getVisibility() == View.VISIBLE) {
+                    fab.hide();
+                    recyclerView.setPadding(0,0,0,0);
+                } else if (dy < 0 && fab.getVisibility() != View.VISIBLE) {
+                    fab.show();
+                    recyclerView.setPadding(0,20,0,0);
+                    appBarLayout.setExpanded(true,true);
+                }
+                if(dy > 0) //check for scroll down
+                {
+                    visibleItemCount = getLinearLayoutManager(recyclerView).getChildCount();
+                    totalItemCount = getLinearLayoutManager(recyclerView).getItemCount();
+                    pastVisiblesItems = getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition();
+                    if (loading)
+                    {
+                        if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
+                        {
+                            loading = false;
+                            searchMoviesViewModel.getSearchMoviesNextPage(searchQuery.getText().toString());
+                            searchMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
+                        }
+                    }
+                    loading = true;
+                }
+            }
+        });
     }
 
     @Override
@@ -92,6 +164,23 @@ public class SearchMoviesFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void addToFavourites(Movies movie) {
+
+    }
+
+    @Override
+    public void movieDetails(Movies movie) {
+        Intent intent = new Intent(getActivity(),MovieDetails.class);
+        intent.putExtra(getString(R.string.EXTRA_MOVIE_ID),movie.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        searchMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -105,5 +194,8 @@ public class SearchMoviesFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    private LinearLayoutManager getLinearLayoutManager(RecyclerView recyclerView){
+        return (LinearLayoutManager) recyclerView.getLayoutManager();
     }
 }

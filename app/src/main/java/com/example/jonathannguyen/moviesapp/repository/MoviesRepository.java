@@ -186,4 +186,49 @@ public class MoviesRepository {
                 });
     }
 
+    public void getSearchMovies(String query,final OnGetMoviesCallback callback){
+        theMovieDbService.getSearchMovies(API_KEY,LANGUAGE,1,query).enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                if(response.isSuccessful()){
+                    MoviesResponse moviesResponse = response.body();
+                    if(moviesResponse != null && moviesResponse.getMovies() != null) {
+                        callback.onSuccess(moviesResponse.getMovies());
+                    } else {
+                        callback.onError();
+                    }
+                } else {
+                    callback.onError();
+                }
+            }
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                Log.d(MoviesRepository.class.toString(),"Failed to get search movies");
+                callback.onError();
+            }
+        });
+    }
+
+    public void getSearchMoviesNextPage(String query,Integer page,final OnGetMoviesCallback callback){
+        theMovieDbService.getSearchMovies(API_KEY,LANGUAGE,page,query).enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                if(response.isSuccessful()){
+                    MoviesResponse moviesResponse = response.body();
+                    if(moviesResponse != null && moviesResponse.getMovies() != null) {
+                        callback.onSuccess(moviesResponse.getMovies());
+                    } else {
+                        callback.onError();
+                    }
+                } else {
+                    callback.onError();
+                }
+            }
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                Log.d(MoviesRepository.class.toString(),"Failed to get search movies");
+                callback.onError();
+            }
+        });
+    }
 }

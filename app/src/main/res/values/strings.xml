@@ -2,7 +2,8 @@
     <string name="app_name">MoviesApp</string>
     <string name="action_settings">Settings</string>
     <string name="refresh_popular_movies">The list of popular movies have been refreshed</string>
-
+    <string name="search_query_empty">Please enter a movie title</string>
+    <string name="hint_search">Enter a movie title</string>
     <string name="fragment_popular">Popular</string>
     <string name="fragment_search">Search</string>
     <string name="fragment_favourites">Favourites</string>
