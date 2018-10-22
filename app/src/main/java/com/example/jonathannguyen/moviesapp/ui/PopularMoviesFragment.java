@@ -157,9 +157,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
 
     @Override
     public void addToFavourites(Movies movie) {
-        // TODO add movie to favourites db
         moviesViewModel.addMovieToFavourites(movie);
-        Log.d("fav",movie.getTitle());
     }
 
     @Override

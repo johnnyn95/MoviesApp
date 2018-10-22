@@ -166,7 +166,7 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
 
     @Override
     public void addToFavourites(Movies movie) {
-
+        searchMoviesViewModel.addMovieToFavourites(movie);
     }
 
     @Override

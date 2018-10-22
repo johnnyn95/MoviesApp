@@ -16,6 +16,7 @@ import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.model.Reviews;
 import com.example.jonathannguyen.moviesapp.api.model.Trailers;
+import com.example.jonathannguyen.moviesapp.repository.FavouriteMoviesRepository;
 import com.example.jonathannguyen.moviesapp.repository.MoviesRepository;
 
 import java.util.ArrayList;
@@ -30,12 +31,14 @@ public class SearchMoviesViewModel extends AndroidViewModel {
     private MutableLiveData<List<Reviews>> mReviews = new MutableLiveData<>();
 
     private MoviesRepository moviesRepository;
+    private FavouriteMoviesRepository favouriteMoviesRepository;
     private TheMovieDbService api;
     int currentSearchPage = 1;
 
     public SearchMoviesViewModel(Application application){
         super(application);
         moviesRepository = new MoviesRepository(application,api);
+        favouriteMoviesRepository = new FavouriteMoviesRepository(application);
     }
 
     public void getSearchMovies(String query){
@@ -147,7 +150,8 @@ public class SearchMoviesViewModel extends AndroidViewModel {
     }
 
     public void addMovieToFavourites(Movies movie){
-        // TODO add movie to favourites db
+        favouriteMoviesRepository.getInstance(getApplication());
+        favouriteMoviesRepository.addMovieToFavourites(movie);
 
     }
 
