@@ -13,7 +13,11 @@ import java.util.List;
 @TypeConverters({Converters.class})
 @Entity(tableName = "movies_table")
 public class Movies {
-    @PrimaryKey
+
+    @PrimaryKey(autoGenerate = true)
+    @SerializedName("localId")
+    private int localId;
+
     @SerializedName("id")
     @Expose
     private int id;
@@ -50,6 +54,13 @@ public class Movies {
     @Expose
     private List<Genres> genres;
 
+    public int getLocalId() {
+        return localId;
+    }
+
+    public void setLocalId(int localId) {
+        this.localId = localId;
+    }
 
     public int getId() {
         return id;

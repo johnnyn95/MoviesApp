@@ -87,16 +87,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         }
 
         private String getGenres(List<Integer> genreIds) {
-            List<String> movieGenres = new ArrayList<>();
-            for (Integer genreId : genreIds) {
-                for (Genres genre : allGenres) {
-                    if (genre.getId() == genreId) {
-                        movieGenres.add(genre.getName());
-                        break;
+            if(allGenres != null) {
+                List<String> movieGenres = new ArrayList<>();
+                for (Integer genreId : genreIds) {
+                    for (Genres genre : allGenres) {
+                        if (genre.getId() == genreId) {
+                            movieGenres.add(genre.getName());
+                            break;
+                        }
                     }
                 }
+                return TextUtils.join(", ", movieGenres);
+            } else {
+                return "something happened with the genres";
             }
-            return TextUtils.join(", ", movieGenres);
         }
 
         @Override

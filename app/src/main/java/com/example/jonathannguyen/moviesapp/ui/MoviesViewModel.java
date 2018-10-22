@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.jonathannguyen.moviesapp.api.OnGetReviewsCallback;
@@ -13,6 +14,7 @@ import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.OnGetMovieCallback;
 import com.example.jonathannguyen.moviesapp.api.model.Reviews;
 import com.example.jonathannguyen.moviesapp.api.model.Trailers;
+import com.example.jonathannguyen.moviesapp.repository.FavouriteMoviesRepository;
 import com.example.jonathannguyen.moviesapp.repository.MoviesRepository;
 import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
 import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
@@ -28,17 +30,18 @@ public class MoviesViewModel extends AndroidViewModel  {
     private MutableLiveData<Movies> mMovieDetails = new MutableLiveData<>();
     private MutableLiveData<List<Trailers>> mTrailers = new MutableLiveData<>();
     private MutableLiveData<List<Reviews>> mReviews = new MutableLiveData<>();
+    private MutableLiveData<List<Movies>> mFavouriteMovies = new MutableLiveData<>(); ;
 
     private MoviesRepository moviesRepository;
+    private FavouriteMoviesRepository favouriteMoviesRepository;
     private TheMovieDbService api;
     int currentPopularPage = 1;
 
     public MoviesViewModel(Application application){
         super(application);
         moviesRepository = new MoviesRepository(application,api);
+        favouriteMoviesRepository = new FavouriteMoviesRepository(application);
     }
-
-
 
     public void getPopularMovies(){
         moviesRepository = MoviesRepository.getInstance(getApplication());
@@ -137,7 +140,7 @@ public class MoviesViewModel extends AndroidViewModel  {
 
     public LiveData<List<Movies>> getmMovies(){ return mMovies; }
 
-    public LiveData<List<Genres>> getmGenres(){ return mGenres; }
+    public LiveData<List<Genres>> getmGenres(){ return mGenres;}
 
     public LiveData<Integer> getmLastPosition(){ return mLastPosition; }
 
@@ -150,8 +153,14 @@ public class MoviesViewModel extends AndroidViewModel  {
     }
 
     public void addMovieToFavourites(Movies movie){
-        // TODO add movie to favourites db
+         favouriteMoviesRepository.getInstance(getApplication());
+         favouriteMoviesRepository.addMovieToFavourites(movie);
 
+    }
+
+    public void insertGenres(){
+        favouriteMoviesRepository.getInstance(getApplication());
+        favouriteMoviesRepository.insertGenres(mGenres.getValue());
     }
 
     public void setLastAdapterPosition(Integer position){

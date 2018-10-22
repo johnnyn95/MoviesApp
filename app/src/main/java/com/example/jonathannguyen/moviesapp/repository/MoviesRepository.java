@@ -1,6 +1,8 @@
 package com.example.jonathannguyen.moviesapp.repository;
 
 import android.app.Application;
+import android.arch.lifecycle.LiveData;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.jonathannguyen.moviesapp.api.OnGetReviewsCallback;
@@ -15,6 +17,10 @@ import com.example.jonathannguyen.moviesapp.api.OnGetMovieCallback;
 import com.example.jonathannguyen.moviesapp.api.model.ReviewsResponse;
 import com.example.jonathannguyen.moviesapp.api.model.Trailers;
 import com.example.jonathannguyen.moviesapp.api.model.TrailersResponse;
+import com.example.jonathannguyen.moviesapp.db.MoviesDao;
+import com.example.jonathannguyen.moviesapp.db.MoviesRoomDatabase;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +33,7 @@ public class MoviesRepository {
     private static final String LANGUAGE = "en-US";
     private static final String API_KEY = "e5c29049ee97d4ff4783f528930be86e";
     public static MoviesRepository repository;
+
     private TheMovieDbService theMovieDbService;
 
     public MoviesRepository(Application application,TheMovieDbService api){
@@ -231,4 +238,5 @@ public class MoviesRepository {
             }
         });
     }
+
 }

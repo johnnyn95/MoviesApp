@@ -85,6 +85,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
             public void onChanged(@Nullable List<Movies> movies) {
                 adapter.setMovies(movies);
                 adapter.setAllGenres(moviesViewModel.getmGenres().getValue());
+                moviesViewModel.insertGenres();
                 recyclerView.setAdapter(adapter);
 
                 if(moviesViewModel.getmLastPosition().getValue() != null){
@@ -136,12 +137,6 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
         moviesViewModel.getPopularMovies();
 
     }
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -163,6 +158,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
     @Override
     public void addToFavourites(Movies movie) {
         // TODO add movie to favourites db
+        moviesViewModel.addMovieToFavourites(movie);
         Log.d("fav",movie.getTitle());
     }
 
