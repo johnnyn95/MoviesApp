@@ -23,9 +23,9 @@ import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import java.util.List;
 
 
-public class FavouriteMoviesFragment extends Fragment implements MoviesAdapterOnClickHandler{
+public class FavouriteMoviesFragment extends Fragment implements FavouriteMoviesAdapterOnClickHandler{
     FavouriteMoviesViewModel favouriteMoviesViewModel;
-    MoviesAdapter adapter = new MoviesAdapter(this);
+    FavouriteMoviesAdapter adapter = new FavouriteMoviesAdapter(this);
     RecyclerView recyclerView;
 
     private OnFragmentInteractionListener mListener;
@@ -72,6 +72,7 @@ public class FavouriteMoviesFragment extends Fragment implements MoviesAdapterOn
                 recyclerView.scrollToPosition(favouriteMoviesViewModel.getmLastPosition().getValue());
             }
         });
+        favouriteMoviesViewModel.getFavouriteMovies();
     }
 
     @Override
@@ -92,8 +93,12 @@ public class FavouriteMoviesFragment extends Fragment implements MoviesAdapterOn
     }
 
     @Override
-    public void addToFavourites(Movies movie) {
-
+    public void removeFromFavourites(Movies movie) {
+        favouriteMoviesViewModel.removeMovieFromFavourites(movie);
+        adapter.setMovies(favouriteMoviesViewModel.getmMovies().getValue());
+        adapter.setAllGenres(favouriteMoviesViewModel.getmGenres().getValue());
+        recyclerView.setAdapter(adapter);
+        recyclerView.scrollToPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
     }
 
     @Override
@@ -101,6 +106,16 @@ public class FavouriteMoviesFragment extends Fragment implements MoviesAdapterOn
         Intent intent = new Intent(getActivity(),MovieDetails.class);
         intent.putExtra(getString(R.string.EXTRA_MOVIE_ID),movie.getId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        favouriteMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
+    }
+
+    private LinearLayoutManager getLinearLayoutManager(RecyclerView recyclerView){
+        return (LinearLayoutManager) recyclerView.getLayoutManager();
     }
 
     /**

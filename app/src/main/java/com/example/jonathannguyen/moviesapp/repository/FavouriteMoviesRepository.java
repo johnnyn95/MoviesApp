@@ -3,6 +3,7 @@ package com.example.jonathannguyen.moviesapp.repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 import com.example.jonathannguyen.moviesapp.api.model.Genres;
@@ -50,8 +51,12 @@ public class FavouriteMoviesRepository {
         new insertFavouriteMovie(mMoviesDao).execute(movie);
     }
 
+    public void removeMovieFromFavourites(Movies movie){
+        new deleteFavouriteMovie(mMoviesDao).execute(movie);
+    }
+
     public void insertGenres(List<Genres> genres){
-        new insertAllGenres(mGenresDao).execute(genres);
+        new insertGenres(mGenresDao).execute(genres);
     }
 
     private static class insertFavouriteMovie extends AsyncTask<Movies, Void, Void> {
@@ -65,25 +70,25 @@ public class FavouriteMoviesRepository {
         }
     }
 
-    private static class insertAllGenres extends AsyncTask<List<Genres>,Void ,Void>{
+    private static class insertGenres extends AsyncTask<List<Genres>,Void ,Void>{
         private GenresDao mAsyncTaskDao;
-        insertAllGenres(GenresDao dao) { mAsyncTaskDao = dao; }
+        insertGenres(GenresDao dao) { mAsyncTaskDao = dao; }
         @Override
         protected Void doInBackground(final List<Genres>... params) {
-            for(int i = 0;i < params.length;i++){
-                mAsyncTaskDao.insert(params[i].get(i));
-            }
+            mAsyncTaskDao.insertAll(params[0]);
             return null;
         }
     }
 
-    private static class insertGenres extends AsyncTask<Genres,Void ,Void>{
-        private GenresDao mAsyncTaskDao;
-        insertGenres(GenresDao dao) { mAsyncTaskDao = dao; }
+    private static class deleteFavouriteMovie extends AsyncTask<Movies, Void, Void> {
+        private MoviesDao mAsyncTaskDao;
+        deleteFavouriteMovie(MoviesDao dao) { mAsyncTaskDao = dao; }
+
         @Override
-        protected Void doInBackground(final Genres... params) {
-            mAsyncTaskDao.insert(params[0]);
+        protected Void doInBackground(final Movies... params) {
+            mAsyncTaskDao.deleteMovieFromFavourites(params[0].getId());
             return null;
         }
     }
+
 }

@@ -30,7 +30,6 @@ public class MoviesViewModel extends AndroidViewModel  {
     private MutableLiveData<Movies> mMovieDetails = new MutableLiveData<>();
     private MutableLiveData<List<Trailers>> mTrailers = new MutableLiveData<>();
     private MutableLiveData<List<Reviews>> mReviews = new MutableLiveData<>();
-    private MutableLiveData<List<Movies>> mFavouriteMovies = new MutableLiveData<>(); ;
 
     private MoviesRepository moviesRepository;
     private FavouriteMoviesRepository favouriteMoviesRepository;
@@ -62,6 +61,7 @@ public class MoviesViewModel extends AndroidViewModel  {
             public void onSuccess(List<Genres> genres) {
                 if(genres != null)
                     mGenres.postValue(genres);
+                    favouriteMoviesRepository.insertGenres(genres);
             }
 
             @Override

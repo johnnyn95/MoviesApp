@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class Converters {
-    Gson gson = new Gson();
-
     @TypeConverter
     public List<Integer> gettingListFromString(String genreIds) {
         List<Integer> list = new ArrayList<>();
@@ -30,19 +28,26 @@ public class Converters {
     }
 
     @TypeConverter
-    public List<Genres> stringToSomeObjectList(String data) {
-        if (data == null) {
-            return Collections.emptyList();
+    public String fromGenresList(List<Genres> genres) {
+        if (genres == null) {
+            return (null);
         }
-
-        Type listType = new TypeToken<List<Genres>>() {}.getType();
-
-        return gson.fromJson(data, listType);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Genres>>() {}.getType();
+        String json = gson.toJson(genres, type);
+        return json;
     }
 
     @TypeConverter
-    public String someObjectListToString(List<Genres> someObjects) {
-        return gson.toJson(someObjects);
+    public List<Genres> toGenresList(String genresString) {
+        if (genresString == null) {
+            return (null);
+        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Genres>>() {
+        }.getType();
+        List<Genres> genresList = gson.fromJson(genresString, type);
+        return genresList;
     }
 
     @TypeConverter

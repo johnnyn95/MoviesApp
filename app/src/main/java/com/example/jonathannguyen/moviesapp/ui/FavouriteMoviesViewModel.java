@@ -29,20 +29,19 @@ public class FavouriteMoviesViewModel extends AndroidViewModel {
         mGenres = favouriteMoviesRepository.getAllGenres();
     }
 
-    public List<Genres> getAllGenres(){return favouriteMoviesRepository.getAllGenres().getValue();}
-
-    public LiveData<List<Genres>> getmGenres() {
-        return mGenres;
+    public LiveData<List<Genres>> getmGenres() { return mGenres;
     }
 
-    public LiveData<List<Movies>> getmMovies() {
-        return mMovies;
+    public LiveData<List<Movies>> getmMovies() { return mMovies;
     }
 
-    public LiveData<Integer> getmLastPosition(){ return mLastPosition; }
-
+    public LiveData<Integer> getmLastPosition() { return mLastPosition; }
 
     public void setLastAdapterPosition(Integer position){
         mLastPosition.postValue(position);
+    }
+
+    public void removeMovieFromFavourites(Movies movie){
+        favouriteMoviesRepository.removeMovieFromFavourites(movie);
     }
 }

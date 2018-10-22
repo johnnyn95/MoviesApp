@@ -10,7 +10,9 @@ import com.example.jonathannguyen.moviesapp.api.model.Genres;
 @Database(entities = {Genres.class},version = 1)
 public abstract class GenresRoomDatabase extends RoomDatabase {
     public abstract GenresDao genresDao();
+
     private static volatile  GenresRoomDatabase INSTANCE;
+
     public static GenresRoomDatabase getDatabase(final Context context){
         if(INSTANCE == null){
             synchronized (GenresRoomDatabase.class){

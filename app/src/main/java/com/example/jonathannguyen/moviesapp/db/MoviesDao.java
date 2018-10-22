@@ -5,7 +5,6 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
-import android.support.annotation.MainThread;
 
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
 
@@ -21,4 +20,7 @@ public interface MoviesDao {
 
     @Query("SELECT * from movies_table ORDER BY localId ASC")
     LiveData<List<Movies>> getAllMovies();
+
+    @Query("DELETE FROM movies_table WHERE movies_table.id == :movieId")
+    void deleteMovieFromFavourites(int movieId);
 }
