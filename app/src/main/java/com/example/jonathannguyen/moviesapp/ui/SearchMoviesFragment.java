@@ -75,6 +75,9 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                     searchMoviesViewModel.getSearchMovies(searchQuery.getText().toString());
                     fab.hide();
                     appBarLayout.setExpanded(false,true);
+                    if(searchMoviesViewModel.getmLastPosition().getValue() != null){
+                        recyclerView.scrollToPosition(searchMoviesViewModel.getmLastPosition().getValue());
+                    }
                 } else {
                     Snackbar snackbar = Snackbar
                             .make(view, R.string.search_query_empty, Snackbar.LENGTH_SHORT)
@@ -104,9 +107,9 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                 adapter.setAllGenres(searchMoviesViewModel.getmGenres().getValue());
                 recyclerView.setAdapter(adapter);
 
-                if(searchMoviesViewModel.getmLastPosition().getValue() != null){
-                    recyclerView.scrollToPosition(searchMoviesViewModel.getmLastPosition().getValue());
-                }
+//                if(searchMoviesViewModel.getmLastPosition().getValue() != null){
+//                    recyclerView.scrollToPosition(searchMoviesViewModel.getmLastPosition().getValue());
+//                }
 
             }
         });

@@ -46,6 +46,7 @@ public class FavouriteMoviesAdapter extends RecyclerView.Adapter<FavouriteMovies
     @Override
     public void onBindViewHolder(@NonNull FavouriteMoviesAdapter.MovieViewHolder movieViewHolder, int i){
         movieViewHolder.bind(movies.get(i));
+
     }
 
     @Override
@@ -109,6 +110,8 @@ public class FavouriteMoviesAdapter extends RecyclerView.Adapter<FavouriteMovies
             if(movie != null) {
                 if (v == delete) {
                     moviesAdapterOnClickHandler.removeFromFavourites(movie);
+                    movies.remove(position);
+                    notifyItemRemoved(position);
                 } else {
                     moviesAdapterOnClickHandler.movieDetails(movie);
                 }

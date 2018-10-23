@@ -70,7 +70,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
                 View sbView = snackbar.getView();
                 sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
                 snackbar.show();
-                recyclerView.scrollToPosition(0);
+                recyclerView.smoothScrollToPosition(0);
             }
         });
 
@@ -89,7 +89,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
                 recyclerView.setAdapter(adapter);
 
                 if(moviesViewModel.getmLastPosition().getValue() != null){
-                    recyclerView.scrollToPosition(moviesViewModel.getmLastPosition().getValue());
+                    recyclerView.smoothScrollToPosition(moviesViewModel.getmLastPosition().getValue());
                 }
 
             }
@@ -98,7 +98,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
         moviesViewModel.getmLastPosition().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
-                recyclerView.scrollToPosition(moviesViewModel.getmLastPosition().getValue());
+                recyclerView.smoothScrollToPosition(moviesViewModel.getmLastPosition().getValue());
             }
         });
 
