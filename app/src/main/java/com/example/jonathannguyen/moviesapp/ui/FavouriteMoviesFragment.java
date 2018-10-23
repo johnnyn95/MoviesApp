@@ -27,6 +27,7 @@ import java.util.List;
 
 public class FavouriteMoviesFragment extends Fragment implements FavouriteMoviesAdapterOnClickHandler{
     FavouriteMoviesViewModel favouriteMoviesViewModel;
+    MoviesViewModel moviesViewModel;
     FavouriteMoviesAdapter adapter = new FavouriteMoviesAdapter(this);
     RecyclerView recyclerView;
 
@@ -59,16 +60,22 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         favouriteMoviesViewModel = ViewModelProviders.of(this).get(FavouriteMoviesViewModel.class);
+
         favouriteMoviesViewModel.getmMovies().observe(this, new Observer<List<Movies>>() {
             @Override
             public void onChanged(@Nullable List<Movies> movies) {
                 adapter.setMovies(movies);
-                adapter.setAllGenres(favouriteMoviesViewModel.getmGenres().getValue());
                 recyclerView.setAdapter(adapter);
                 if(favouriteMoviesViewModel.getmLastPosition().getValue() != null) {
                 recyclerView.scrollToPosition(favouriteMoviesViewModel.getmLastPosition().getValue());
                 }
 
+            }
+        });
+        favouriteMoviesViewModel.getmGenres().observe(this, new Observer<List<Genres>>() {
+            @Override
+            public void onChanged(@Nullable List<Genres> genres) {
+                adapter.setAllGenres(genres);
             }
         });
 

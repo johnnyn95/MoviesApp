@@ -3,6 +3,7 @@ package com.example.jonathannguyen.moviesapp.ui;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,7 +100,8 @@ public class FavouriteMoviesAdapter extends RecyclerView.Adapter<FavouriteMovies
                 }
                 return TextUtils.join(", ", movieGenres);
             } else {
-                return "something happened with the genres";
+                Log.d(FavouriteMoviesAdapter.class.toString(),"Failed to fetch genres");
+                return "";
             }
         }
 

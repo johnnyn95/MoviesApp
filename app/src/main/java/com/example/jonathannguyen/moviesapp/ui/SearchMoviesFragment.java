@@ -43,9 +43,7 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
     int pastVisiblesItems, visibleItemCount, totalItemCount;
     private OnFragmentInteractionListener mListener;
 
-    public SearchMoviesFragment() {
-        // Required empty public constructor
-    }
+    public SearchMoviesFragment() { }
 
     public static SearchMoviesFragment newInstance() {
         SearchMoviesFragment fragment = new SearchMoviesFragment();
@@ -111,11 +109,6 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                 adapter.setMovies(movies);
                 adapter.setAllGenres(searchMoviesViewModel.getmGenres().getValue());
                 recyclerView.setAdapter(adapter);
-
-//                if(searchMoviesViewModel.getmLastPosition().getValue() != null){
-//                    recyclerView.scrollToPosition(searchMoviesViewModel.getmLastPosition().getValue());
-//                }
-
             }
         });
 
@@ -135,7 +128,7 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                     recyclerView.setPadding(0,20,0,0);
                     appBarLayout.setExpanded(true,true);
                 }
-                if(dy > 0) //check for scroll down
+                if(dy > 0)
                 {
                     visibleItemCount = getLinearLayoutManager(recyclerView).getChildCount();
                     totalItemCount = getLinearLayoutManager(recyclerView).getItemCount();
@@ -218,5 +211,4 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
-
 }

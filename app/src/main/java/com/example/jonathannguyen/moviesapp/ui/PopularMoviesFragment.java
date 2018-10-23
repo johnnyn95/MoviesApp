@@ -88,7 +88,6 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
             public void onChanged(@Nullable List<Movies> movies) {
                 adapter.setMovies(movies);
                 adapter.setAllGenres(moviesViewModel.getmGenres().getValue());
-                moviesViewModel.insertGenres();
                 recyclerView.setAdapter(adapter);
 
                 if(moviesViewModel.getmLastPosition().getValue() != null){

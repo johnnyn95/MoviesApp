@@ -13,13 +13,12 @@ public abstract class GenresRoomDatabase extends RoomDatabase {
 
     private static volatile  GenresRoomDatabase INSTANCE;
 
-    public static GenresRoomDatabase getDatabase(final Context context){
-        if(INSTANCE == null){
-            synchronized (GenresRoomDatabase.class){
-                if(INSTANCE == null){
+    public static GenresRoomDatabase getDatabase(final Context context) {
+        if (INSTANCE == null) {
+            synchronized (GenresRoomDatabase.class) {
+                if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            GenresRoomDatabase.class,
-                            "genres_database")
+                            GenresRoomDatabase.class, "genres_database").fallbackToDestructiveMigration()
                             .build();
                 }
             }

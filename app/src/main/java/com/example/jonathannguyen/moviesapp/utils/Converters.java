@@ -15,47 +15,28 @@ import java.util.List;
 public class Converters {
     @TypeConverter
     public List<Integer> gettingListFromString(String genreIds) {
-        List<Integer> list = new ArrayList<>();
-
-        String[] array = genreIds.split(",");
-
-        for (String s : array) {
-            if (!s.isEmpty()) {
-                list.add(Integer.parseInt(s));
-            }
-        }
-        return list;
+        Type listType = new TypeToken<List<Integer>>() {}.getType();
+        return new Gson().fromJson(genreIds, listType);
     }
 
     @TypeConverter
-    public String fromGenresList(List<Genres> genres) {
-        if (genres == null) {
-            return (null);
-        }
+    public List<Genres> gettingGenresListFromString(String genresString) {
+        Type listType = new TypeToken<List<Genres>>() {}.getType();
+        return new Gson().fromJson(genresString, listType);
+    }
+
+    @TypeConverter
+    public String writingStringFromGenresList(List<Genres> genres) {
         Gson gson = new Gson();
-        Type type = new TypeToken<List<Genres>>() {}.getType();
-        String json = gson.toJson(genres, type);
+        String json = gson.toJson(genres);
         return json;
     }
 
     @TypeConverter
-    public List<Genres> toGenresList(String genresString) {
-        if (genresString == null) {
-            return (null);
-        }
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<Genres>>() {
-        }.getType();
-        List<Genres> genresList = gson.fromJson(genresString, type);
-        return genresList;
-    }
-
-    @TypeConverter
     public String writingStringFromList(List<Integer> list) {
-        String genreIds = "";
-        for (int i : list) {
-            genreIds += "," + i;
-        }
-        return genreIds;
+
+        Gson gson = new Gson();
+        String json = gson.toJson(list);
+        return json;
     }
 }

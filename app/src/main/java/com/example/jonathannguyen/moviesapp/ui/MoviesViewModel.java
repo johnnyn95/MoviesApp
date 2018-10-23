@@ -61,6 +61,7 @@ public class MoviesViewModel extends AndroidViewModel  {
             public void onSuccess(List<Genres> genres) {
                 if(genres != null)
                     mGenres.postValue(genres);
+                    favouriteMoviesRepository.getInstance(getApplication());
                     favouriteMoviesRepository.insertGenres(genres);
             }
 
@@ -148,9 +149,7 @@ public class MoviesViewModel extends AndroidViewModel  {
 
     public LiveData<List<Trailers>> getmTrailers(){ return mTrailers;}
 
-    public MutableLiveData<List<Reviews>> getmReviews() {
-        return mReviews;
-    }
+    public MutableLiveData<List<Reviews>> getmReviews(){ return mReviews; }
 
     public void addMovieToFavourites(Movies movie){
          favouriteMoviesRepository.getInstance(getApplication());
@@ -158,12 +157,5 @@ public class MoviesViewModel extends AndroidViewModel  {
 
     }
 
-    public void insertGenres(){
-        favouriteMoviesRepository.getInstance(getApplication());
-        favouriteMoviesRepository.insertGenres(mGenres.getValue());
-    }
-
-    public void setLastAdapterPosition(Integer position){
-        mLastPosition.postValue(position);
-    }
+    public void setLastAdapterPosition(Integer position){ mLastPosition.postValue(position); }
 }

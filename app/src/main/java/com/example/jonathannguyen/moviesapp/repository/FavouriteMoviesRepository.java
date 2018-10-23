@@ -78,16 +78,6 @@ public class FavouriteMoviesRepository {
             mAsyncTaskDao.insertAll(params[0]);
             return null;
         }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            List<Genres> genresList = mAsyncTaskDao.getAllGenres().getValue();
-            if(genresList != null)
-            for (Genres genre: genresList) {
-                Log.d("asyncgenres",genre.getName());
-            }
-        }
     }
 
     private static class deleteFavouriteMovie extends AsyncTask<Movies, Void, Void> {

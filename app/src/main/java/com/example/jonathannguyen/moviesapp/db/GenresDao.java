@@ -13,12 +13,12 @@ import java.util.List;
 @Dao
 public interface GenresDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insert(Genres genre);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Genres> genres);
 
     @Query("SELECT * FROM genres_table")
     LiveData<List<Genres>> getAllGenres();
-
-    @Query("SELECT * FROM genres_table WHERE genres_table.id == :genreId")
-    Genres getGenreName(int genreId);
 }
 
