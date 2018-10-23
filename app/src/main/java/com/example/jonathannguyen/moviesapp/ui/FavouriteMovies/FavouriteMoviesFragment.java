@@ -1,4 +1,4 @@
-package com.example.jonathannguyen.moviesapp.ui;
+package com.example.jonathannguyen.moviesapp.ui.FavouriteMovies;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -20,14 +20,13 @@ import android.view.ViewGroup;
 import com.example.jonathannguyen.moviesapp.R;
 import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
+import com.example.jonathannguyen.moviesapp.ui.MovieDetails;
 
 
 import java.util.List;
 
-
 public class FavouriteMoviesFragment extends Fragment implements FavouriteMoviesAdapterOnClickHandler{
     FavouriteMoviesViewModel favouriteMoviesViewModel;
-    MoviesViewModel moviesViewModel;
     FavouriteMoviesAdapter adapter = new FavouriteMoviesAdapter(this);
     RecyclerView recyclerView;
 
@@ -55,12 +54,10 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = getView().findViewById(R.id.recyclerview_favourites);
-        recyclerView.setAdapter(adapter);
         if(recyclerView.getLayoutManager() == null)
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         favouriteMoviesViewModel = ViewModelProviders.of(this).get(FavouriteMoviesViewModel.class);
-
         favouriteMoviesViewModel.getmMovies().observe(this, new Observer<List<Movies>>() {
             @Override
             public void onChanged(@Nullable List<Movies> movies) {
@@ -76,13 +73,16 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
             @Override
             public void onChanged(@Nullable List<Genres> genres) {
                 adapter.setAllGenres(genres);
+                if(favouriteMoviesViewModel.getmLastPosition().getValue() != null) {
+                    recyclerView.scrollToPosition(favouriteMoviesViewModel.getmLastPosition().getValue());
+                }
             }
         });
 
         favouriteMoviesViewModel.getmLastPosition().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(@Nullable Integer integer) {
-                recyclerView.scrollToPosition(favouriteMoviesViewModel.getmLastPosition().getValue());
+                recyclerView.scrollToPosition(integer);
             }
         });
         favouriteMoviesViewModel.getFavouriteMovies();
@@ -123,16 +123,6 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
         startActivity(intent);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        favouriteMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
-    }
-
-    private LinearLayoutManager getLinearLayoutManager(RecyclerView recyclerView){
-        return (LinearLayoutManager) recyclerView.getLayoutManager();
-    }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -147,4 +137,16 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(getLinearLayoutManager(recyclerView) != null)
+            favouriteMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
+    }
+
+    private LinearLayoutManager getLinearLayoutManager(RecyclerView recyclerView){
+        return (LinearLayoutManager) recyclerView.getLayoutManager();
+    }
+
 }

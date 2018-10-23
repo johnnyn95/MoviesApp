@@ -1,8 +1,6 @@
 package com.example.jonathannguyen.moviesapp.repository;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.jonathannguyen.moviesapp.api.OnGetReviewsCallback;
@@ -15,12 +13,7 @@ import com.example.jonathannguyen.moviesapp.api.model.MoviesResponse;
 import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 import com.example.jonathannguyen.moviesapp.api.OnGetMovieCallback;
 import com.example.jonathannguyen.moviesapp.api.model.ReviewsResponse;
-import com.example.jonathannguyen.moviesapp.api.model.Trailers;
 import com.example.jonathannguyen.moviesapp.api.model.TrailersResponse;
-import com.example.jonathannguyen.moviesapp.db.MoviesDao;
-import com.example.jonathannguyen.moviesapp.db.MoviesRoomDatabase;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,25 +21,25 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MoviesRepository {
+public class MoviesRepositoryApi {
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static final String LANGUAGE = "en-US";
     private static final String API_KEY = "e5c29049ee97d4ff4783f528930be86e";
-    public static MoviesRepository repository;
+    public static MoviesRepositoryApi repository;
 
     private TheMovieDbService theMovieDbService;
 
-    public MoviesRepository(Application application,TheMovieDbService api){
+    public MoviesRepositoryApi(Application application, TheMovieDbService api){
         theMovieDbService = api;
     }
 
-    public static MoviesRepository getInstance(Application application){
+    public static MoviesRepositoryApi getInstance(Application application){
         if(repository == null) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            repository = new MoviesRepository(application,retrofit.create(TheMovieDbService.class));
+            repository = new MoviesRepositoryApi(application,retrofit.create(TheMovieDbService.class));
         }
         return repository;
     }
@@ -69,7 +62,7 @@ public class MoviesRepository {
                     }
                     @Override
                     public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                        Log.d(MoviesRepository.class.toString(),"Failed to get movies");
+                        Log.d(MoviesRepositoryApi.class.toString(),"Failed to get movies");
                         callback.onError();
                     }
                 });
@@ -88,7 +81,7 @@ public class MoviesRepository {
                                 callback.onError();
                             }
                         } else {
-                            Log.d(MoviesRepository.class.toString(),"Failed to get genres");
+                            Log.d(MoviesRepositoryApi.class.toString(),"Failed to get genres");
                             callback.onError();
                         }
                     }
@@ -118,7 +111,7 @@ public class MoviesRepository {
                     }
                     @Override
                     public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                        Log.d(MoviesRepository.class.toString(),"Failed to get movies");
+                        Log.d(MoviesRepositoryApi.class.toString(),"Failed to get movies");
                         callback.onError();
                     }
                 });
@@ -210,7 +203,7 @@ public class MoviesRepository {
             }
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                Log.d(MoviesRepository.class.toString(),"Failed to get search movies");
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to get search movies");
                 callback.onError();
             }
         });
@@ -233,7 +226,7 @@ public class MoviesRepository {
             }
             @Override
             public void onFailure(Call<MoviesResponse> call, Throwable t) {
-                Log.d(MoviesRepository.class.toString(),"Failed to get search movies");
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to get search movies");
                 callback.onError();
             }
         });

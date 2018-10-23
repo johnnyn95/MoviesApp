@@ -1,9 +1,5 @@
 package com.example.jonathannguyen.moviesapp.ui;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,11 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 
 import com.example.jonathannguyen.moviesapp.R;
+import com.example.jonathannguyen.moviesapp.ui.FavouriteMovies.FavouriteMoviesFragment;
+import com.example.jonathannguyen.moviesapp.ui.PopularMovies.PopularMoviesFragment;
+import com.example.jonathannguyen.moviesapp.ui.SearchMovies.SearchMoviesFragment;
 
 public class MainActivity extends AppCompatActivity implements
         PopularMoviesFragment.OnFragmentInteractionListener,

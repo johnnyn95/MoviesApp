@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.jonathannguyen.moviesapp.R;
+import com.example.jonathannguyen.moviesapp.ui.FavouriteMovies.FavouriteMoviesFragment;
+import com.example.jonathannguyen.moviesapp.ui.PopularMovies.PopularMoviesFragment;
+import com.example.jonathannguyen.moviesapp.ui.SearchMovies.SearchMoviesFragment;
 
 public class MoviesAppPagerAdapter extends FragmentPagerAdapter {
     private Context mContext;

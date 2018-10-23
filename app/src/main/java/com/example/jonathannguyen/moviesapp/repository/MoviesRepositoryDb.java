@@ -3,38 +3,31 @@ package com.example.jonathannguyen.moviesapp.repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.db.GenresDao;
 import com.example.jonathannguyen.moviesapp.db.GenresRoomDatabase;
 import com.example.jonathannguyen.moviesapp.db.MoviesDao;
 import com.example.jonathannguyen.moviesapp.db.MoviesRoomDatabase;
-import com.example.jonathannguyen.moviesapp.ui.FavouriteMoviesViewModel;
 
 import java.util.List;
-import java.util.ListIterator;
 
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
-
-public class FavouriteMoviesRepository {
+public class MoviesRepositoryDb {
     private MoviesDao mMoviesDao;
     private GenresDao mGenresDao;
-    public static FavouriteMoviesRepository repository;
+    public static MoviesRepositoryDb repository;
 
-    public FavouriteMoviesRepository(Application application){
+    public MoviesRepositoryDb(Application application){
         MoviesRoomDatabase moviesRoomDatabase = MoviesRoomDatabase.getDatabase(application);
         GenresRoomDatabase genresRoomDatabase = GenresRoomDatabase.getDatabase(application);
         mMoviesDao = moviesRoomDatabase.moviesDao();
         mGenresDao = genresRoomDatabase.genresDao();
     }
 
-    public static FavouriteMoviesRepository getInstance(Application application){
+    public static MoviesRepositoryDb getInstance(Application application){
         if(repository == null) {
-            repository = new FavouriteMoviesRepository(application);
+            repository = new MoviesRepositoryDb(application);
         }
         return repository;
     }

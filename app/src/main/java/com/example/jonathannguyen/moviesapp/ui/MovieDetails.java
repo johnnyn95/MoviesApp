@@ -4,14 +4,12 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -27,13 +25,14 @@ import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.model.Reviews;
 import com.example.jonathannguyen.moviesapp.api.model.Trailers;
+import com.example.jonathannguyen.moviesapp.ui.PopularMovies.PopularMoviesViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MovieDetails extends AppCompatActivity {
 
-    private MoviesViewModel moviesViewModel;
+    private PopularMoviesViewModel popularMoviesViewModel;
 
     private static String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w780";
     private static String YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%s";
@@ -63,28 +62,28 @@ public class MovieDetails extends AppCompatActivity {
         }
         setupToolbar();
         initUI();
-        moviesViewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
-        moviesViewModel.getmMovieDetails().observe(this, new Observer<Movies>() {
+        popularMoviesViewModel = ViewModelProviders.of(this).get(PopularMoviesViewModel.class);
+        popularMoviesViewModel.getmMovieDetails().observe(this, new Observer<Movies>() {
             @Override
             public void onChanged(@Nullable Movies movies) {
-                setMovie(moviesViewModel.getmMovieDetails().getValue());
+                setMovie(popularMoviesViewModel.getmMovieDetails().getValue());
             }
         });
-        moviesViewModel.getmTrailers().observe(this, new Observer<List<Trailers>>(){
+        popularMoviesViewModel.getmTrailers().observe(this, new Observer<List<Trailers>>(){
             @Override
             public void onChanged(@Nullable List<Trailers> trailers) {
                 setMovieTrailers(trailers);
             }
         });
-        moviesViewModel.getmReviews().observe(this, new Observer<List<Reviews>>() {
+        popularMoviesViewModel.getmReviews().observe(this, new Observer<List<Reviews>>() {
             @Override
             public void onChanged(@Nullable List<Reviews> reviews) {
                 setMovieReviews(reviews);
             }
         });
-        moviesViewModel.getMovieDetails(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
-        moviesViewModel.getMovieTrailers(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
-        moviesViewModel.getMovieReviews(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
+        popularMoviesViewModel.getMovieDetails(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
+        popularMoviesViewModel.getMovieTrailers(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
+        popularMoviesViewModel.getMovieReviews(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
     }
 
     private void initUI() {

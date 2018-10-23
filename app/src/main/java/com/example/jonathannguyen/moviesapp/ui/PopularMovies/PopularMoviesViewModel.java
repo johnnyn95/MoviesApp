@@ -1,4 +1,4 @@
-package com.example.jonathannguyen.moviesapp.ui;
+package com.example.jonathannguyen.moviesapp.ui.PopularMovies;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -6,23 +6,23 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
-import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
-import com.example.jonathannguyen.moviesapp.api.OnGetMovieCallback;
-import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
 import com.example.jonathannguyen.moviesapp.api.OnGetReviewsCallback;
 import com.example.jonathannguyen.moviesapp.api.OnGetTrailersCallback;
-import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
+import com.example.jonathannguyen.moviesapp.api.OnGetMovieCallback;
 import com.example.jonathannguyen.moviesapp.api.model.Reviews;
 import com.example.jonathannguyen.moviesapp.api.model.Trailers;
-import com.example.jonathannguyen.moviesapp.repository.FavouriteMoviesRepository;
-import com.example.jonathannguyen.moviesapp.repository.MoviesRepository;
+import com.example.jonathannguyen.moviesapp.repository.MoviesRepositoryDb;
+import com.example.jonathannguyen.moviesapp.repository.MoviesRepositoryApi;
+import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
+import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
+import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchMoviesViewModel extends AndroidViewModel {
+public class PopularMoviesViewModel extends AndroidViewModel  {
     private MutableLiveData<List<Movies>> mMovies = new MutableLiveData<>();
     private MutableLiveData<List<Genres>> mGenres  = new MutableLiveData<>();
     private MutableLiveData<Integer> mLastPosition = new MutableLiveData<>();
@@ -30,49 +30,51 @@ public class SearchMoviesViewModel extends AndroidViewModel {
     private MutableLiveData<List<Trailers>> mTrailers = new MutableLiveData<>();
     private MutableLiveData<List<Reviews>> mReviews = new MutableLiveData<>();
 
-    private MoviesRepository moviesRepository;
-    private FavouriteMoviesRepository favouriteMoviesRepository;
+    private MoviesRepositoryApi moviesRepositoryApi;
+    private MoviesRepositoryDb moviesRepositoryDb;
     private TheMovieDbService api;
-    int currentSearchPage = 1;
+    int currentPopularPage = 1;
 
-    public SearchMoviesViewModel(Application application){
+    public PopularMoviesViewModel(Application application){
         super(application);
-        moviesRepository = new MoviesRepository(application,api);
-        favouriteMoviesRepository = new FavouriteMoviesRepository(application);
+        moviesRepositoryApi = new MoviesRepositoryApi(application,api);
+        moviesRepositoryDb = new MoviesRepositoryDb(application);
     }
 
-    public void getSearchMovies(String query){
-        moviesRepository = MoviesRepository.getInstance(getApplication());
-        moviesRepository.getSearchMovies(query,new OnGetMoviesCallback() {
+    public void getPopularMovies(){
+        moviesRepositoryApi = MoviesRepositoryApi.getInstance(getApplication());
+        moviesRepositoryApi.getPopularMovies(new OnGetMoviesCallback() {
             @Override
             public void onSuccess(List<Movies> movies) {
                 if(movies != null)
-                    mMovies.postValue(movies);
+                mMovies.postValue(movies);
             }
 
             @Override
             public void onError() {
-                Log.d(MoviesRepository.class.toString(),"Failed to fetch movies");
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to fetch movies");
             }
         });
-        moviesRepository.getGenres(new OnGetGenresCallback() {
+        moviesRepositoryApi.getGenres(new OnGetGenresCallback() {
             @Override
             public void onSuccess(List<Genres> genres) {
                 if(genres != null)
                     mGenres.postValue(genres);
+                    moviesRepositoryDb.getInstance(getApplication());
+                    moviesRepositoryDb.insertGenres(genres);
             }
 
             @Override
             public void onError() {
-                Log.d(MoviesRepository.class.toString(),"Failed to fetch genres");
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to fetch genres");
             }
         });
     }
 
-    public void getSearchMoviesNextPage(String query){
-        currentSearchPage++;
-        moviesRepository = MoviesRepository.getInstance(getApplication());
-        moviesRepository.getSearchMoviesNextPage(query,currentSearchPage,new OnGetMoviesCallback() {
+    public void getPopularMoviesNextPage(){
+        currentPopularPage++;
+        moviesRepositoryApi = MoviesRepositoryApi.getInstance(getApplication());
+        moviesRepositoryApi.getPopularMoviesNextPage(new OnGetMoviesCallback() {
             @Override
             public void onSuccess(List<Movies> movies) {
                 if(movies != null) {
@@ -84,28 +86,29 @@ public class SearchMoviesViewModel extends AndroidViewModel {
 
             @Override
             public void onError() {
-                Log.d(MoviesRepository.class.toString(),"Failed to fetch movies");
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to fetch movies");
             }
-        });
+        },currentPopularPage);
     }
 
     public void getMovieDetails(int movieId){
-        moviesRepository = MoviesRepository.getInstance(getApplication());
-        moviesRepository.getMovie(movieId, new OnGetMovieCallback() {
+        moviesRepositoryApi = MoviesRepositoryApi.getInstance(getApplication());
+        moviesRepositoryApi.getMovie(movieId, new OnGetMovieCallback() {
             @Override
             public void onSuccess(Movies movie) {
                 mMovieDetails.postValue(movie);
             }
+
             @Override
             public void onError() {
-                Log.d(MoviesRepository.class.toString(),"Failed to fetch movie");
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to fetch movie");
             }
         });
     }
 
     public void getMovieTrailers(int movieId){
-        moviesRepository = MoviesRepository.getInstance(getApplication());
-        moviesRepository.getTrailers(movieId, new OnGetTrailersCallback() {
+        moviesRepositoryApi = MoviesRepositoryApi.getInstance(getApplication());
+        moviesRepositoryApi.getTrailers(movieId, new OnGetTrailersCallback() {
             @Override
             public void onSuccess(List<Trailers> trailers) {
                 mTrailers.postValue(trailers);
@@ -113,15 +116,15 @@ public class SearchMoviesViewModel extends AndroidViewModel {
 
             @Override
             public void onError() {
-                Log.d(MoviesRepository.class.toString(),"Failed to fetch trailers");
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to fetch trailers");
             }
         });
 
     }
 
     public void getMovieReviews(int movieId){
-        moviesRepository = MoviesRepository.getInstance(getApplication());
-        moviesRepository.getReviews(movieId, new OnGetReviewsCallback() {
+        moviesRepositoryApi = MoviesRepositoryApi.getInstance(getApplication());
+        moviesRepositoryApi.getReviews(movieId, new OnGetReviewsCallback() {
             @Override
             public void onSuccess(List<Reviews> reviews) {
                 mReviews.postValue(reviews);
@@ -129,7 +132,7 @@ public class SearchMoviesViewModel extends AndroidViewModel {
 
             @Override
             public void onError() {
-                Log.d(MoviesRepository.class.toString(),"Failed to fetch reviews");
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to fetch reviews");
             }
         });
 
@@ -137,7 +140,7 @@ public class SearchMoviesViewModel extends AndroidViewModel {
 
     public LiveData<List<Movies>> getmMovies(){ return mMovies; }
 
-    public LiveData<List<Genres>> getmGenres(){ return mGenres; }
+    public LiveData<List<Genres>> getmGenres(){ return mGenres;}
 
     public LiveData<Integer> getmLastPosition(){ return mLastPosition; }
 
@@ -145,17 +148,13 @@ public class SearchMoviesViewModel extends AndroidViewModel {
 
     public LiveData<List<Trailers>> getmTrailers(){ return mTrailers;}
 
-    public MutableLiveData<List<Reviews>> getmReviews() {
-        return mReviews;
-    }
+    public MutableLiveData<List<Reviews>> getmReviews(){ return mReviews; }
 
     public void addMovieToFavourites(Movies movie){
-        favouriteMoviesRepository.getInstance(getApplication());
-        favouriteMoviesRepository.addMovieToFavourites(movie);
+         moviesRepositoryDb.getInstance(getApplication());
+         moviesRepositoryDb.addMovieToFavourites(movie);
 
     }
 
-    public void setLastAdapterPosition(Integer position){
-        mLastPosition.postValue(position);
-    }
+    public void setLastAdapterPosition(Integer position){ mLastPosition.postValue(position); }
 }

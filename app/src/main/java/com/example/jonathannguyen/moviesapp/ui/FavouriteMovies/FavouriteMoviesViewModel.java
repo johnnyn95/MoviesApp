@@ -1,4 +1,4 @@
-package com.example.jonathannguyen.moviesapp.ui;
+package com.example.jonathannguyen.moviesapp.ui.FavouriteMovies;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -8,25 +8,25 @@ import android.support.annotation.NonNull;
 
 import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
-import com.example.jonathannguyen.moviesapp.repository.FavouriteMoviesRepository;
+import com.example.jonathannguyen.moviesapp.repository.MoviesRepositoryDb;
 
 import java.util.List;
 
 public class FavouriteMoviesViewModel extends AndroidViewModel {
-    FavouriteMoviesRepository favouriteMoviesRepository;
+    MoviesRepositoryDb moviesRepositoryDb;
     LiveData<List<Movies>> mMovies;
     LiveData<List<Genres>> mGenres;
     private MutableLiveData<Integer> mLastPosition = new MutableLiveData<>();
 
     public FavouriteMoviesViewModel(@NonNull Application application) {
         super(application);
-        favouriteMoviesRepository = new FavouriteMoviesRepository(application);
+        moviesRepositoryDb = new MoviesRepositoryDb(application);
         getFavouriteMovies();
     }
 
     public void getFavouriteMovies(){
-        mMovies = favouriteMoviesRepository.getAllMovies();
-        mGenres = favouriteMoviesRepository.getAllGenres();
+        mMovies = moviesRepositoryDb.getAllMovies();
+        mGenres = moviesRepositoryDb.getAllGenres();
     }
 
     public LiveData<List<Genres>> getmGenres() { return mGenres;
@@ -42,6 +42,6 @@ public class FavouriteMoviesViewModel extends AndroidViewModel {
     }
 
     public void removeMovieFromFavourites(Movies movie){
-        favouriteMoviesRepository.removeMovieFromFavourites(movie);
+        moviesRepositoryDb.removeMovieFromFavourites(movie);
     }
 }

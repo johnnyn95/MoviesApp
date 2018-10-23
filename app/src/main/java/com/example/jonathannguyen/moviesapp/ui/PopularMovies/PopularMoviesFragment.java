@@ -1,6 +1,5 @@
-package com.example.jonathannguyen.moviesapp.ui;
+package com.example.jonathannguyen.moviesapp.ui.PopularMovies;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -11,42 +10,37 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
 
 import com.example.jonathannguyen.moviesapp.R;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
+import com.example.jonathannguyen.moviesapp.ui.MovieDetails;
+import com.example.jonathannguyen.moviesapp.ui.MoviesAdapter;
+import com.example.jonathannguyen.moviesapp.ui.MoviesAdapterOnClickHandler;
 
 import java.util.List;
 
-public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnClickHandler {
-    private SearchMoviesViewModel searchMoviesViewModel;
+public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnClickHandler {
+    PopularMoviesViewModel popularMoviesViewModel;
     MoviesAdapter adapter = new MoviesAdapter(this);
     RecyclerView recyclerView;
-    EditText searchQuery;
-    FloatingActionButton fab;
-    AppBarLayout appBarLayout;
-    ImageButton clearSearchQuery;
     private boolean loading = true;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
+
     private OnFragmentInteractionListener mListener;
 
-    public SearchMoviesFragment() { }
+    public PopularMoviesFragment() { }
 
-    public static SearchMoviesFragment newInstance() {
-        SearchMoviesFragment fragment = new SearchMoviesFragment();
+    public static PopularMoviesFragment newInstance() {
+        PopularMoviesFragment fragment = new PopularMoviesFragment();
         return fragment;
     }
 
@@ -58,57 +52,56 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.fragment_search_movies, container, false);
+        return inflater.inflate(R.layout.fragment_popular_movies, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = getView().findViewById(R.id.recyclerview_search);
-        searchQuery = getView().findViewById(R.id.search_query);
-        clearSearchQuery = getView().findViewById(R.id.clear_search_query);
-        appBarLayout = getView().findViewById(R.id.appBarLayout);
-        fab = getView().findViewById(R.id.fab_search);
+        recyclerView = getView().findViewById(R.id.recyclerview);
+        final FloatingActionButton fab = getView().findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(searchQuery.getText().toString() != "" && !TextUtils.isEmpty(searchQuery.getText().toString())){
-                    searchMoviesViewModel.getSearchMovies(searchQuery.getText().toString());
-                    fab.hide();
-                    appBarLayout.setExpanded(false,true);
-                    hideKeyboardFrom(getContext(),view);
-                    if(searchMoviesViewModel.getmLastPosition().getValue() != null){
-                        recyclerView.scrollToPosition(searchMoviesViewModel.getmLastPosition().getValue());
-                    }
-                } else {
-                    Snackbar snackbar = Snackbar
-                            .make(view, R.string.search_query_empty, Snackbar.LENGTH_SHORT)
-                            .setAction("Action", null);
-                    View sbView = snackbar.getView();
-                    sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
-                    snackbar.show();
-                }
+                popularMoviesViewModel.setLastAdapterPosition(0);
+                popularMoviesViewModel.getPopularMovies();
+                fab.hide();
+                Snackbar snackbar = Snackbar.make(view, R.string.refresh_popular_movies, Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null);
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                snackbar.show();
+                recyclerView.smoothScrollToPosition(0);
             }
         });
-        clearSearchQuery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchQuery.setText("");
-            }
-        });
-        recyclerView.setAdapter(adapter);
-        if(recyclerView.getLayoutManager() == null){
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        }
 
-        searchMoviesViewModel = ViewModelProviders.of(this).get(SearchMoviesViewModel.class);
-        searchMoviesViewModel.getmMovies().observe(this, new Observer<List<Movies>>(){
+        recyclerView.setAdapter(adapter);
+        if(recyclerView.getLayoutManager() == null) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        } else {
+            recyclerView.setLayoutManager(getLinearLayoutManager(recyclerView));
+        }
+        popularMoviesViewModel = ViewModelProviders.of(this).get(PopularMoviesViewModel.class);
+
+        popularMoviesViewModel.getmMovies().observe(this, new Observer<List<Movies>>(){
             @Override
             public void onChanged(@Nullable List<Movies> movies) {
                 adapter.setMovies(movies);
-                adapter.setAllGenres(searchMoviesViewModel.getmGenres().getValue());
+                adapter.setAllGenres(popularMoviesViewModel.getmGenres().getValue());
                 recyclerView.setAdapter(adapter);
+
+                if(popularMoviesViewModel.getmLastPosition().getValue() != null){
+                    recyclerView.scrollToPosition(popularMoviesViewModel.getmLastPosition().getValue());
+                }
+
+            }
+        });
+
+        popularMoviesViewModel.getmLastPosition().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer integer) {
+                recyclerView.scrollToPosition(integer);
             }
         });
 
@@ -122,30 +115,30 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0 && fab.getVisibility() == View.VISIBLE) {
                     fab.hide();
-                    recyclerView.setPadding(0,0,0,0);
                 } else if (dy < 0 && fab.getVisibility() != View.VISIBLE) {
                     fab.show();
-                    recyclerView.setPadding(0,20,0,0);
-                    appBarLayout.setExpanded(true,true);
                 }
                 if(dy > 0)
                 {
                     visibleItemCount = getLinearLayoutManager(recyclerView).getChildCount();
                     totalItemCount = getLinearLayoutManager(recyclerView).getItemCount();
                     pastVisiblesItems = getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition();
+
                     if (loading)
                     {
                         if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
                         {
                             loading = false;
-                            searchMoviesViewModel.getSearchMoviesNextPage(searchQuery.getText().toString());
-                            searchMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
+                            popularMoviesViewModel.getPopularMoviesNextPage();
+                            popularMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
                         }
                     }
                     loading = true;
                 }
             }
         });
+        popularMoviesViewModel.getPopularMovies();
+
     }
 
     @Override
@@ -167,7 +160,7 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
 
     @Override
     public void addToFavourites(Movies movie) {
-        searchMoviesViewModel.addMovieToFavourites(movie);
+        popularMoviesViewModel.addMovieToFavourites(movie);
     }
 
     @Override
@@ -177,11 +170,6 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
         startActivity(intent);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        searchMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
-    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -196,13 +184,19 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    private LinearLayoutManager getLinearLayoutManager(RecyclerView recyclerView){
-        return (LinearLayoutManager) recyclerView.getLayoutManager();
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(getLinearLayoutManager(recyclerView) != null)
+        popularMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
     }
 
-    public static void hideKeyboardFrom(Context context, View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    private LinearLayoutManager getLinearLayoutManager(RecyclerView recyclerView){
+        if(recyclerView != null)
+        return (LinearLayoutManager) recyclerView.getLayoutManager();
+        else
+            return null;
     }
 
     public boolean isNetworkAvailable() {
@@ -211,4 +205,5 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
 }

@@ -1,4 +1,4 @@
-package com.example.jonathannguyen.moviesapp.ui;
+package com.example.jonathannguyen.moviesapp.ui.FavouriteMovies;
 
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
 
