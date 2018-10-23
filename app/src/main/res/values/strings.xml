@@ -4,6 +4,7 @@
     <string name="refresh_popular_movies">The list of popular movies have been refreshed</string>
     <string name="search_query_empty">Please enter a movie title</string>
     <string name="removed_movie">The movie has been removed from your favourites list!</string>
+    <string name="no_internet">Sorry, there is no internet connection.</string>
     <string name="hint_search">Enter a movie title</string>
     <string name="fragment_popular">Popular</string>
     <string name="fragment_search">Search</string>

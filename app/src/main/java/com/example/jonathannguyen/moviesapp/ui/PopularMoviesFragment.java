@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Movie;
+import android.hardware.SensorManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -115,7 +118,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
                 } else if (dy < 0 && fab.getVisibility() != View.VISIBLE) {
                     fab.show();
                 }
-                if(dy > 0) //check for scroll down
+                if(dy > 0)
                 {
                     visibleItemCount = getLinearLayoutManager(recyclerView).getChildCount();
                     totalItemCount = getLinearLayoutManager(recyclerView).getItemCount();
@@ -191,4 +194,12 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
     private LinearLayoutManager getLinearLayoutManager(RecyclerView recyclerView){
         return (LinearLayoutManager) recyclerView.getLayoutManager();
     }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
 }
