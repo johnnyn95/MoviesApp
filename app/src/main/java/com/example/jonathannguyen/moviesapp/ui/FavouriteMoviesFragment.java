@@ -107,7 +107,6 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
         sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
         snackbar.show();
         favouriteMoviesViewModel.setLastAdapterPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
-        //recyclerView.scrollToPosition(getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition());
     }
 
     @Override

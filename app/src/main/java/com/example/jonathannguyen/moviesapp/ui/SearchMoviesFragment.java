@@ -1,5 +1,6 @@
 package com.example.jonathannguyen.moviesapp.ui;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -19,6 +20,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -75,6 +77,7 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                     searchMoviesViewModel.getSearchMovies(searchQuery.getText().toString());
                     fab.hide();
                     appBarLayout.setExpanded(false,true);
+                    hideKeyboardFrom(getContext(),view);
                     if(searchMoviesViewModel.getmLastPosition().getValue() != null){
                         recyclerView.scrollToPosition(searchMoviesViewModel.getmLastPosition().getValue());
                     }
@@ -200,5 +203,10 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
     }
     private LinearLayoutManager getLinearLayoutManager(RecyclerView recyclerView){
         return (LinearLayoutManager) recyclerView.getLayoutManager();
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
