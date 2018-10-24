@@ -14,6 +14,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,6 +35,29 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
 
     private OnFragmentInteractionListener mListener;
 
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_favourites,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId){
+            case R.id.action_removeAll:
+                favouriteMoviesViewModel.removeAllMoviesFromFavourites();
+                Snackbar snackbar = Snackbar.make(getView(), R.string.all_movies_removed, Snackbar.LENGTH_SHORT)
+                        .setAction("Action", null);
+                View sbView = snackbar.getView();
+                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                snackbar.show();
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public FavouriteMoviesFragment() { }
 
     public static FavouriteMoviesFragment newInstance(String param1, String param2) {
@@ -42,6 +68,7 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override

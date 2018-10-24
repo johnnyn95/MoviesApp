@@ -44,4 +44,7 @@ public class FavouriteMoviesViewModel extends AndroidViewModel {
     public void removeMovieFromFavourites(Movies movie){
         moviesRepositoryDb.removeMovieFromFavourites(movie);
     }
+
+    public void removeAllMoviesFromFavourites() {
+    moviesRepositoryDb.removeAllMoviesFromFavourites();}
 }

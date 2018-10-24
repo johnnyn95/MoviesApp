@@ -20,6 +20,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -63,7 +66,6 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                              Bundle savedInstanceState) {
             return inflater.inflate(R.layout.fragment_search_movies, container, false);
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -112,6 +114,11 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                 adapter.setMovies(movies);
                 adapter.setAllGenres(searchMoviesViewModel.getmGenres().getValue());
                 recyclerView.setAdapter(adapter);
+                if(getLinearLayoutManager(recyclerView).getChildCount() < 1){
+                    fab.show();
+                    recyclerView.setPadding(0,20,0,0);
+                    appBarLayout.setExpanded(true,true);
+                }
             }
         });
 

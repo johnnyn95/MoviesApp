@@ -16,7 +16,7 @@ public interface MoviesDao {
     void insert(Movies movie);
 
     @Query("DELETE FROM movies_table")
-    void deleteAll();
+    void deleteAllMoviesFromFavourites();
 
     @Query("SELECT * from movies_table ORDER BY localId ASC")
     LiveData<List<Movies>> getAllMovies();

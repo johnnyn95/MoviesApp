@@ -63,6 +63,10 @@ public class MoviesRepositoryDb {
         new deleteFavouriteMovie(mMoviesDao).execute(movie);
     }
 
+    public void removeAllMoviesFromFavourites(){
+        new deleteAllFavouriteMovies(mMoviesDao).execute();
+    }
+
     public void insertGenres(List<Genres> genres){
         new insertGenres(mGenresDao).execute(genres);
     }
@@ -95,6 +99,17 @@ public class MoviesRepositoryDb {
         @Override
         protected Void doInBackground(final Movies... params) {
             mAsyncTaskDao.deleteMovieFromFavourites(params[0].getId());
+            return null;
+        }
+    }
+
+    private static class deleteAllFavouriteMovies extends AsyncTask<Void, Void, Void> {
+        private MoviesDao mAsyncTaskDao;
+        deleteAllFavouriteMovies(MoviesDao dao) { mAsyncTaskDao = dao; }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAllMoviesFromFavourites();
             return null;
         }
     }
