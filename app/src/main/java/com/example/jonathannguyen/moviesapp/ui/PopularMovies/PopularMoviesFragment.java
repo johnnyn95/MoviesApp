@@ -160,7 +160,20 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
 
     @Override
     public void addToFavourites(Movies movie) {
-        popularMoviesViewModel.addMovieToFavourites(movie);
+        if(!popularMoviesViewModel.checkIfMovieIsInFavourites(movie)){
+            popularMoviesViewModel.addMovieToFavourites(movie);
+            Snackbar snackbar = Snackbar.make(getView(), R.string.movie_added, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null);
+            View sbView = snackbar.getView();
+            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorSuccess));
+            snackbar.show();
+        } else {
+            Snackbar snackbar = Snackbar.make(getView(), R.string.movie_duplicate, Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null);
+            View sbView = snackbar.getView();
+            sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+            snackbar.show();
+        }
     }
 
     @Override

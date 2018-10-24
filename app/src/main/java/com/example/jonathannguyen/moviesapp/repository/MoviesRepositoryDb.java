@@ -3,6 +3,7 @@ package com.example.jonathannguyen.moviesapp.repository;
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
@@ -12,6 +13,7 @@ import com.example.jonathannguyen.moviesapp.db.MoviesDao;
 import com.example.jonathannguyen.moviesapp.db.MoviesRoomDatabase;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MoviesRepositoryDb {
     private MoviesDao mMoviesDao;
@@ -42,6 +44,19 @@ public class MoviesRepositoryDb {
 
     public void addMovieToFavourites(Movies movie){
         new insertFavouriteMovie(mMoviesDao).execute(movie);
+    }
+
+    public boolean checkIfMovieIsInFavourites(Movies movie){
+        boolean duplicate = false;
+        AsyncTask<Movies, Void, Boolean> asyncTask =  new checkIfMovieIsInFavourites(mMoviesDao).execute(movie);
+        try {
+            duplicate = asyncTask.get();
+        } catch (ExecutionException e){
+            Log.d(MoviesRepositoryDb.class.toString(),e.toString());
+        } catch (InterruptedException e){
+            Log.d(MoviesRepositoryDb.class.toString(),e.toString());
+        }
+        return duplicate;
     }
 
     public void removeMovieFromFavourites(Movies movie){
@@ -81,6 +96,18 @@ public class MoviesRepositoryDb {
         protected Void doInBackground(final Movies... params) {
             mAsyncTaskDao.deleteMovieFromFavourites(params[0].getId());
             return null;
+        }
+    }
+
+    private static class checkIfMovieIsInFavourites extends  AsyncTask<Movies, Void,Boolean>{
+        private MoviesDao mAsyncTaskDao;
+        checkIfMovieIsInFavourites(MoviesDao dao){ mAsyncTaskDao = dao; }
+        @Override
+        protected Boolean doInBackground(Movies... movies) {
+            if(mAsyncTaskDao.getMovieById(movies[0].getId()) != null){
+                return true;
+            }
+            return false;
         }
     }
 

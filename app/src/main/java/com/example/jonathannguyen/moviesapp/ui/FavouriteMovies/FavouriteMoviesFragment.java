@@ -108,7 +108,7 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
     @Override
     public void removeFromFavourites(Movies movie) {
         favouriteMoviesViewModel.removeMovieFromFavourites(movie);
-        Snackbar snackbar = Snackbar.make(getView(), R.string.removed_movie, Snackbar.LENGTH_SHORT)
+        Snackbar snackbar = Snackbar.make(getView(), R.string.movie_removed, Snackbar.LENGTH_SHORT)
                 .setAction("Action", null);
         View sbView = snackbar.getView();
         sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));

@@ -155,6 +155,11 @@ public class SearchMoviesViewModel extends AndroidViewModel {
 
     }
 
+    public boolean checkIfMovieIsInFavourites(Movies movie){
+        moviesRepositoryDb.getInstance(getApplication());
+        return moviesRepositoryDb.checkIfMovieIsInFavourites(movie);
+    }
+
     public void setLastAdapterPosition(Integer position){
         mLastPosition.postValue(position);
     }

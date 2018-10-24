@@ -153,7 +153,11 @@ public class PopularMoviesViewModel extends AndroidViewModel  {
     public void addMovieToFavourites(Movies movie){
          moviesRepositoryDb.getInstance(getApplication());
          moviesRepositoryDb.addMovieToFavourites(movie);
+    }
 
+    public boolean checkIfMovieIsInFavourites(Movies movie){
+        moviesRepositoryDb.getInstance(getApplication());
+        return moviesRepositoryDb.checkIfMovieIsInFavourites(movie);
     }
 
     public void setLastAdapterPosition(Integer position){ mLastPosition.postValue(position); }
