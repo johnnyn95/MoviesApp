@@ -62,7 +62,8 @@
                     android:inputType="text"
                     android:importantForAutofill="no"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_collapseMode="parallax"/>
+                    app:layout_collapseMode="parallax"
+                    android:focusedByDefault="false"/>
                 <ImageButton
                     android:id="@+id/clear_search_query"
                     android:layout_width="30dp"

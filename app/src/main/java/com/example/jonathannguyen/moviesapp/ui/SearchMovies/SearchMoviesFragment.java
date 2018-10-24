@@ -126,10 +126,13 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                 if (dy > 0 && fab.getVisibility() == View.VISIBLE) {
                     fab.hide();
                     recyclerView.setPadding(0,0,0,0);
+                    hideKeyboardFrom(getContext(),recyclerView);
                 } else if (dy < 0 && fab.getVisibility() != View.VISIBLE) {
                     fab.show();
                     recyclerView.setPadding(0,20,0,0);
                     appBarLayout.setExpanded(true,true);
+                    hideKeyboardFrom(getContext(),recyclerView);
+
                 }
                 if(dy > 0)
                 {
