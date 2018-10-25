@@ -22,4 +22,19 @@
 
     <string name="language_key">language</string>
     <string name="language_title">Language</string>
+
+    <string name="lang_en_title">English</string>
+    <string name="lang_en_value">en-US</string>
+
+    <string name="lang_bg_title">Bulgarian</string>
+    <string name="lang_bg_value">bg-BG</string>
+
+    <string name="lang_fr_title">French</string>
+    <string name="lang_fr_value">fr-FR</string>
+
+    <string name="lang_de_title">German</string>
+    <string name="lang_de_value">de-DE</string>
+
+    <string name="lang_ru_title">Russian</string>
+    <string name="lang_ru_value">ru-RU</string>
 </resources>

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:defaultValue="@string/lang_en_value"
+        android:entries="@array/language_titles"
+        android:entryValues="@array/language_values"
+        android:key="@string/language_key"
+        android:title="@string/language_title"/>
     <CheckBoxPreference
         android:defaultValue="@bool/notifications_default_value"
         android:key="@string/notifications_key"

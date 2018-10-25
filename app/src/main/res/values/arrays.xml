@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="language_titles">
+        <item>@string/lang_en_title</item>
+        <item>@string/lang_bg_title</item>
+        <item>@string/lang_fr_title</item>
+        <item>@string/lang_de_title</item>
+        <item>@string/lang_ru_title</item>
+    </array>
+    <array name="language_values">
+        <item>@string/lang_en_value</item>
+        <item>@string/lang_bg_value</item>
+        <item>@string/lang_fr_value</item>
+        <item>@string/lang_de_value</item>
+        <item>@string/lang_ru_value</item>
+    </array>
+</resources>
