@@ -25,6 +25,8 @@
         <activity android:name=".ui.MovieDetails" />
         <activity
             android:name=".ui.Settings.SettingsActivity"/>
+        <service
+            android:name=".utils.GetTrendingMoviesIntentService"
+            android:exported="false"/>
     </application>
-
 </manifest>

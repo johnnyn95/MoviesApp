@@ -12,6 +12,7 @@ import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.model.MoviesResponse;
 import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
 import com.example.jonathannguyen.moviesapp.api.OnGetMovieCallback;
+import com.example.jonathannguyen.moviesapp.api.model.MoviesTrendingResponse;
 import com.example.jonathannguyen.moviesapp.api.model.ReviewsResponse;
 import com.example.jonathannguyen.moviesapp.api.model.TrailersResponse;
 
@@ -25,8 +26,9 @@ public class MoviesRepositoryApi {
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private static String LANGUAGE = "en-US";
     private static final String API_KEY = "e5c29049ee97d4ff4783f528930be86e";
+    private static final String MEDIA_TYPE = "movie";
+    private static final String TIME_WINDOW = "day";
     public static MoviesRepositoryApi repository;
-
     private TheMovieDbService theMovieDbService;
 
     public MoviesRepositoryApi(Application application, TheMovieDbService api,String language){
@@ -230,6 +232,30 @@ public class MoviesRepositoryApi {
                 Log.d(MoviesRepositoryApi.class.toString(),"Failed to get search movies");
                 callback.onError();
             }
+        });
+    }
+
+    public void getTrendingMovies(final OnGetMoviesCallback callback){
+        theMovieDbService.getTrendingMovies(API_KEY,MEDIA_TYPE,TIME_WINDOW)
+                .enqueue(new Callback<MoviesResponse>() {
+                @Override
+                public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                    if(response.isSuccessful()){
+                        MoviesResponse moviesResponse = response.body();
+                        if(moviesResponse != null && moviesResponse.getMovies() != null) {
+                            callback.onSuccess(moviesResponse.getMovies());
+                        } else {
+                            callback.onError();
+                        }
+                    } else {
+                        callback.onError();
+                    }
+                }
+                @Override
+                public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                    Log.d(MoviesRepositoryApi.class.toString(),"Failed to get trending movies");
+                    callback.onError();
+                }
         });
     }
 }

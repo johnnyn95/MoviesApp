@@ -15,6 +15,8 @@
     <string name="fragment_favourites">Favourites</string>
     <string name="EXTRA_MOVIE_ID">MOVIE_ID</string>
 
+    <string name="main_notification_channel_name">NOTIFICATIONS</string>
+
     <string name="notifications_key">notifications</string>
     <string name="notifications_title">Notifications</string>
     <string name="notifications_on">You will receive notifications</string>

@@ -21,6 +21,7 @@ import com.example.jonathannguyen.moviesapp.ui.PopularMovies.PopularMoviesFragme
 import com.example.jonathannguyen.moviesapp.ui.SearchMovies.SearchMoviesFragment;
 import com.example.jonathannguyen.moviesapp.ui.Settings.SettingsActivity;
 import com.example.jonathannguyen.moviesapp.utils.CheckSettings;
+import com.example.jonathannguyen.moviesapp.utils.GetTrendingMoviesIntentService;
 
 public class MainActivity extends AppCompatActivity implements
         PopularMoviesFragment.OnFragmentInteractionListener,
@@ -115,14 +116,16 @@ public class MainActivity extends AppCompatActivity implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(key == getResources().getString(R.string.notifications_key)) {
             checkSettings.getInstance(getApplication());
-            //TODO implement notifications
-            Log.d(MainActivity.class.toString(),
-                    String.valueOf(sharedPreferences.getBoolean(getResources().getString(R.string.notifications_key), getResources().getBoolean(R.bool.notifications_default_value))));
+            if(sharedPreferences.getBoolean(getResources().getString(R.string.notifications_key), getResources().getBoolean(R.bool.notifications_default_value))== true){
+                Intent restartIntent = new Intent(this, GetTrendingMoviesIntentService.class);
+                startActivity(restartIntent);
+            }
         }
         if(key == getResources().getString(R.string.language_key)){
             checkSettings.getInstance(getApplication());
             checkSettings.setLANGUAGE(sharedPreferences.getString(getResources().getString(R.string.language_key),getResources().getString(R.string.language_default_value)));
         }
+
     }
 
     @Override
@@ -136,10 +139,10 @@ public class MainActivity extends AppCompatActivity implements
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         String language = String.valueOf(sharedPreferences.getString(getResources().getString(R.string.language_key),getResources().getString(R.string.language_default_value)));
         checkSettings = new CheckSettings(getApplication(),language);
-
-//        Log.d(MainActivity.class.toString(),
-//        String.valueOf(sharedPreferences.getBoolean(getResources().getString(R.string.notifications_key),getResources().getBoolean(R.bool.notifications_default_value))));
-
+        if(sharedPreferences.getBoolean(getResources().getString(R.string.notifications_key),getResources().getBoolean(R.bool.notifications_default_value))){
+            Intent startNotificationsIntent = new Intent(this,GetTrendingMoviesIntentService.class);
+            startService(startNotificationsIntent);
+        }
     }
 
     private void initUI(){

@@ -3,6 +3,7 @@ package com.example.jonathannguyen.moviesapp.api;
 import com.example.jonathannguyen.moviesapp.api.model.GenresResponse;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.model.MoviesResponse;
+import com.example.jonathannguyen.moviesapp.api.model.MoviesTrendingResponse;
 import com.example.jonathannguyen.moviesapp.api.model.ReviewsResponse;
 import com.example.jonathannguyen.moviesapp.api.model.TrailersResponse;
 
@@ -46,4 +47,10 @@ public interface TheMovieDbService {
             @Query("api_key") String apiKey,
             @Query("language") String language
     );
+
+    @GET("trending/{media_type}/{time_window}")
+    Call<MoviesResponse> getTrendingMovies(
+            @Path("media_type") String media_type,
+            @Path("time_window") String time_window,
+            @Query("api_key") String apiKey);
 }

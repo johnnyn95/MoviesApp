@@ -2,8 +2,9 @@ package com.example.jonathannguyen.moviesapp.utils;
 
 import android.app.Application;
 
-public class CheckSettings{
+public class CheckSettings  {
     private static String LANGUAGE;
+    private static Boolean NOTIFICATIONS = true;
     public static volatile CheckSettings checkSettings;
 
     public CheckSettings(Application application,String language){
@@ -29,5 +30,13 @@ public class CheckSettings{
             return "en-US";
         } else
         return LANGUAGE;
+    }
+
+    public static Boolean getNOTIFICATIONS() {
+        return NOTIFICATIONS;
+    }
+
+    public static void setNOTIFICATIONS(Boolean NOTIFICATIONS) {
+        CheckSettings.NOTIFICATIONS = NOTIFICATIONS;
     }
 }

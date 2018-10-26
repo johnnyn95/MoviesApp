@@ -11,5 +11,5 @@
         android:key="@string/notifications_key"
         android:summaryOn="@string/notifications_on"
         android:summaryOff="@string/notifications_off"
-        android:title="@string/notifications_title"/>
+        android:title="@string/notifications_title" />
 </PreferenceScreen>
