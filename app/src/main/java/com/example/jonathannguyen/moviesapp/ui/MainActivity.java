@@ -20,6 +20,7 @@ import com.example.jonathannguyen.moviesapp.ui.FavouriteMovies.FavouriteMoviesFr
 import com.example.jonathannguyen.moviesapp.ui.PopularMovies.PopularMoviesFragment;
 import com.example.jonathannguyen.moviesapp.ui.SearchMovies.SearchMoviesFragment;
 import com.example.jonathannguyen.moviesapp.ui.Settings.SettingsActivity;
+import com.example.jonathannguyen.moviesapp.utils.CheckSettings;
 
 public class MainActivity extends AppCompatActivity implements
         PopularMoviesFragment.OnFragmentInteractionListener,
@@ -27,17 +28,19 @@ public class MainActivity extends AppCompatActivity implements
         FavouriteMoviesFragment.OnFragmentInteractionListener,
         SharedPreferences.OnSharedPreferenceChangeListener{
     SharedPreferences sharedPreferences;
+    CheckSettings checkSettings;
+    Toolbar toolbar;
+    ViewPager viewPager;
+    BottomNavigationView bottomNavigationView;
+    MoviesAppPagerAdapter pagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         checkSettings();
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        final ViewPager viewPager = findViewById(R.id.viewpager);
-        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        initUI();
         setSupportActionBar(toolbar);
-        MoviesAppPagerAdapter pagerAdapter = new MoviesAppPagerAdapter(this,getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -108,18 +111,17 @@ public class MainActivity extends AppCompatActivity implements
 
     }
 
-    private void checkSettings(){
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        Log.d(MainActivity.class.toString(),
-        String.valueOf(sharedPreferences.getBoolean(getResources().getString(R.string.notifications_key),getResources().getBoolean(R.bool.notifications_default_value))));
-
-    }
-
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if(key == getResources().getString(R.string.notifications_key)) {
+            checkSettings.getInstance(getApplication());
+            //TODO implement notifications
             Log.d(MainActivity.class.toString(),
                     String.valueOf(sharedPreferences.getBoolean(getResources().getString(R.string.notifications_key), getResources().getBoolean(R.bool.notifications_default_value))));
+        }
+        if(key == getResources().getString(R.string.language_key)){
+            checkSettings.getInstance(getApplication());
+            checkSettings.setLANGUAGE(sharedPreferences.getString(getResources().getString(R.string.language_key),getResources().getString(R.string.language_default_value)));
         }
     }
 
@@ -127,5 +129,23 @@ public class MainActivity extends AppCompatActivity implements
     protected void onDestroy() {
         super.onDestroy();
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    private void checkSettings(){
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        String language = String.valueOf(sharedPreferences.getString(getResources().getString(R.string.language_key),getResources().getString(R.string.language_default_value)));
+        checkSettings = new CheckSettings(getApplication(),language);
+
+//        Log.d(MainActivity.class.toString(),
+//        String.valueOf(sharedPreferences.getBoolean(getResources().getString(R.string.notifications_key),getResources().getBoolean(R.bool.notifications_default_value))));
+
+    }
+
+    private void initUI(){
+        toolbar = findViewById(R.id.toolbar);
+        viewPager = findViewById(R.id.viewpager);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        pagerAdapter = new MoviesAppPagerAdapter(this,getSupportFragmentManager());
     }
 }

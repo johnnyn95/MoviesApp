@@ -70,7 +70,7 @@ public class PopularMoviesFragment extends Fragment implements MoviesAdapterOnCl
                 Snackbar snackbar = Snackbar.make(view, R.string.refresh_popular_movies, Snackbar.LENGTH_SHORT)
                         .setAction("Action", null);
                 View sbView = snackbar.getView();
-                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorSuccess));
                 snackbar.show();
                 recyclerView.smoothScrollToPosition(0);
             }

@@ -18,6 +18,7 @@ import com.example.jonathannguyen.moviesapp.repository.MoviesRepositoryApi;
 import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
 import com.example.jonathannguyen.moviesapp.api.OnGetMoviesCallback;
 import com.example.jonathannguyen.moviesapp.api.TheMovieDbService;
+import com.example.jonathannguyen.moviesapp.utils.CheckSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,14 @@ public class PopularMoviesViewModel extends AndroidViewModel  {
 
     private MoviesRepositoryApi moviesRepositoryApi;
     private MoviesRepositoryDb moviesRepositoryDb;
+    private CheckSettings checkSettings;
     private TheMovieDbService api;
     int currentPopularPage = 1;
 
     public PopularMoviesViewModel(Application application){
         super(application);
-        moviesRepositoryApi = new MoviesRepositoryApi(application,api);
+        checkSettings = checkSettings.getInstance(application);
+        moviesRepositoryApi = new MoviesRepositoryApi(application,api,checkSettings.getLANGUAGE());
         moviesRepositoryDb = new MoviesRepositoryDb(application);
     }
 

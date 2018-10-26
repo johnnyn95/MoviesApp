@@ -18,6 +18,7 @@ import com.example.jonathannguyen.moviesapp.api.model.Reviews;
 import com.example.jonathannguyen.moviesapp.api.model.Trailers;
 import com.example.jonathannguyen.moviesapp.repository.MoviesRepositoryDb;
 import com.example.jonathannguyen.moviesapp.repository.MoviesRepositoryApi;
+import com.example.jonathannguyen.moviesapp.utils.CheckSettings;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,14 @@ public class SearchMoviesViewModel extends AndroidViewModel {
 
     private MoviesRepositoryApi moviesRepositoryApi;
     private MoviesRepositoryDb moviesRepositoryDb;
+    private CheckSettings checkSettings;
     private TheMovieDbService api;
     int currentSearchPage = 1;
 
     public SearchMoviesViewModel(Application application){
         super(application);
-        moviesRepositoryApi = new MoviesRepositoryApi(application,api);
+        checkSettings = checkSettings.getInstance(application);
+        moviesRepositoryApi = new MoviesRepositoryApi(application,api,checkSettings.getLANGUAGE());
         moviesRepositoryDb = new MoviesRepositoryDb(application);
     }
 

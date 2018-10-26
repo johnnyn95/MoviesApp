@@ -23,14 +23,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MoviesRepositoryApi {
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
-    private static final String LANGUAGE = "en-US";
+    private static String LANGUAGE = "en-US";
     private static final String API_KEY = "e5c29049ee97d4ff4783f528930be86e";
     public static MoviesRepositoryApi repository;
 
     private TheMovieDbService theMovieDbService;
 
-    public MoviesRepositoryApi(Application application, TheMovieDbService api){
+    public MoviesRepositoryApi(Application application, TheMovieDbService api,String language){
         theMovieDbService = api;
+        LANGUAGE = language;
     }
 
     public static MoviesRepositoryApi getInstance(Application application){
@@ -39,7 +40,7 @@ public class MoviesRepositoryApi {
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
-            repository = new MoviesRepositoryApi(application,retrofit.create(TheMovieDbService.class));
+            repository = new MoviesRepositoryApi(application,retrofit.create(TheMovieDbService.class),LANGUAGE);
         }
         return repository;
     }
@@ -231,5 +232,4 @@ public class MoviesRepositoryApi {
             }
         });
     }
-
 }

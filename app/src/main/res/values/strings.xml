@@ -22,6 +22,7 @@
 
     <string name="language_key">language</string>
     <string name="language_title">Language</string>
+    <string name="language_default_value">en-US</string>
 
     <string name="lang_en_title">English</string>
     <string name="lang_en_value">en-US</string>
