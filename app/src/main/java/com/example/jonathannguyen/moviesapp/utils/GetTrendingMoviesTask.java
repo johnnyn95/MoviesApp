@@ -42,6 +42,8 @@ public class GetTrendingMoviesTask {
                 break;
             case ACTION_TURN_OFF_NOTIFICATIONS_TRENDING_MOVIES :
                 turnOffNotifications(application);
+                notificationManager = (NotificationManager) application.getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancelAll();
                 break;
         }
 //        if(action == ACTION_GET_TRENDING_MOVIES){
@@ -124,7 +126,9 @@ public class GetTrendingMoviesTask {
 
     private static void turnOffNotifications(final Application application){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application.getBaseContext());
-        sharedPreferences.edit().putBoolean(application.getResources().getString(R.string.notifications_key),false);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(application.getResources().getString(R.string.notifications_key),false);
+        editor.commit();
     }
 
 }

@@ -17,17 +17,17 @@ public class Scheduler {
     private static final int REMINDER_INTERVAL_MINUTES = 60;
     private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
     private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
-
-    private static final String REMINDER_JOB_TAG = "trending_movies_tag";
+    private static final String TRENDING_JOB_TAG = "trending_movies_tag";
 
     private static boolean sInitialized;
+
     synchronized public static void scheduleOnNetworkReminder(@NonNull final Context context) {
         if (sInitialized) return;
         Driver driver = new GooglePlayDriver(context);
         FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
         Job constraintReminderJob = dispatcher.newJobBuilder()
                 .setService(GetTrendingMoviesFirebaseJobService.class)
-                .setTag(REMINDER_JOB_TAG)
+                .setTag(TRENDING_JOB_TAG)
                 .setConstraints(Constraint.ON_ANY_NETWORK)
                 .setLifetime(Lifetime.FOREVER)
                 .setRecurring(true)
@@ -38,6 +38,12 @@ public class Scheduler {
                 .build();
         dispatcher.schedule(constraintReminderJob);
         sInitialized = true;
+    }
+
+    synchronized public static void stopNotifications(final Context context){
+        Driver driver = new GooglePlayDriver(context);
+        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(driver);
+        dispatcher.cancel(TRENDING_JOB_TAG);
     }
 }
 

@@ -32,11 +32,11 @@ import com.example.jonathannguyen.moviesapp.ui.MainActivity;
 import com.example.jonathannguyen.moviesapp.ui.MovieDetails;
 
 public class NotificationUtils {
+    private static final int ADD_TO_FAVOURITES_PENDING_INTENT_ID = 3418;
+    private static final int TURN_OFF_NOTIFICATIONS_PENDING_INTENT_ID = 3419;
     private static final int TRENDING_MOVIE_NOTIFICATION_ID = 1138;
     private static final int TRENDING_MOVIE_PENDING_INTENT_ID = 3417;
     private static final String TRENDING_MOVIE_NOTIFICATION_CHANNEL_ID = "update_notification_channel";
-    private static final int ADD_TO_FAVOURITES_PENDING_INTENT_ID = 3418;
-    private static final int TURN_OFF_NOTIFICATIONS_PENDING_INTENT_ID = 3419;
 
     public static void notifyUser(Context context,Movies movie) {
         final NotificationManager notificationManager = (NotificationManager)
@@ -78,7 +78,6 @@ public class NotificationUtils {
                 startActivityIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
     }
-
 
     private static NotificationCompat.Action turnOffNotificationsAction(Context context){
         Intent turnOffNotificationsIntent = new Intent(context,GetTrendingMoviesIntentService.class);

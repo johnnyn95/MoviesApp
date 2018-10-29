@@ -119,6 +119,11 @@ public class MainActivity extends AppCompatActivity implements
         if(key == getResources().getString(R.string.notifications_key)) {
             checkSettings.getInstance(getApplication());
             checkSettings.setNOTIFICATIONS(sharedPreferences.getBoolean(getResources().getString(R.string.notifications_key), getResources().getBoolean(R.bool.notifications_default_value)));
+            if(!checkSettings.getNOTIFICATIONS()){
+                Scheduler.stopNotifications(this);
+            } else {
+                Scheduler.scheduleOnNetworkReminder(this);
+            }
         }
         if(key == getResources().getString(R.string.language_key)){
             checkSettings.getInstance(getApplication());
@@ -140,9 +145,6 @@ public class MainActivity extends AppCompatActivity implements
         String language = String.valueOf(sharedPreferences.getString(getResources().getString(R.string.language_key),getResources().getString(R.string.language_default_value)));
         checkSettings = new CheckSettings(getApplication(),language);
         if(checkSettings.getNOTIFICATIONS()){
-             //Intent startNotificationsIntent = new Intent(this,GetTrendingMoviesIntentService.class);
-             //startNotificationsIntent.setAction(GetTrendingMoviesTask.ACTION_GET_TRENDING_MOVIES);
-             //startService(startNotificationsIntent);
             Scheduler.scheduleOnNetworkReminder(this);
         }
     }
