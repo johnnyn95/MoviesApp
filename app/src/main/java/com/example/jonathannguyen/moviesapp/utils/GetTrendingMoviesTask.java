@@ -19,7 +19,7 @@ public class GetTrendingMoviesTask {
     public GetTrendingMoviesTask(Application application){
         moviesRepositoryApi = moviesRepositoryApi.getInstance(application);
     }
-    public void executeTask(Application application,String action){
+    public void executeTask(final Application application,String action){
         if(action == ACTION_GET_TRENDING_MOVIES){
             AsyncTask<Void,Void,List<Movies>> getTrendingMoviesAsyncTask = new AsyncTask<Void, Void, List<Movies>>() {
                 List<Movies> result;
@@ -29,12 +29,12 @@ public class GetTrendingMoviesTask {
                         @Override
                         public void onSuccess(List<Movies> movies) {
                             trendingMovies = movies;
-                            Log.d("PLSWORK",getRandomMovie(trendingMovies).getTitle());
+                            NotificationUtils.notifyUser(application.getBaseContext(),getRandomMovie(trendingMovies));
                         }
 
                         @Override
                         public void onError() {
-                            Log.d("PLSWORK","DONT");
+                            Log.d(GetTrendingMoviesTask.class.toString(),"Failed to fetch movie from Trending service!");
                         }
                     });
                     return result;
