@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'com.android.support:cardview-v7:28.0.0'
     implementation 'com.android.support:preference-v14:28.0.0'
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 
     // Room components
     implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"

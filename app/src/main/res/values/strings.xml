@@ -22,7 +22,8 @@
     <string name="notifications_on">You will receive notifications</string>
     <string name="notifications_off">You will not receive notifications</string>
     <string name="notification_title">New movie is out! </string>
-
+    <string name="notification_turn_off">Turn off Notifications</string>
+    <string name="notification_add_to_favourites">Add movie to favourites</string>
 
     <string name="language_key">language</string>
     <string name="language_title">Language</string>
