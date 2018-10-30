@@ -23,7 +23,7 @@ import android.view.ViewGroup;
 import com.example.jonathannguyen.moviesapp.R;
 import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
-import com.example.jonathannguyen.moviesapp.ui.MovieDetails;
+import com.example.jonathannguyen.moviesapp.ui.MovieDetails.MovieDetails;
 
 
 import java.util.List;
@@ -147,6 +147,7 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
     public void movieDetails(Movies movie) {
         Intent intent = new Intent(getActivity(),MovieDetails.class);
         intent.putExtra(getString(R.string.EXTRA_MOVIE_ID),movie.getId());
+        intent.putExtra(getString(R.string.EXTRA_CALLED_FROM_FAVOURITES),true);
         startActivity(intent);
     }
 

@@ -1,35 +1,18 @@
 package com.example.jonathannguyen.moviesapp.utils;
 
-import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BaseTarget;
-import com.bumptech.glide.request.target.NotificationTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.target.SizeReadyCallback;
-import com.bumptech.glide.request.transition.Transition;
 import com.example.jonathannguyen.moviesapp.R;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
-import com.example.jonathannguyen.moviesapp.repository.MoviesRepositoryDb;
-import com.example.jonathannguyen.moviesapp.ui.MainActivity;
-import com.example.jonathannguyen.moviesapp.ui.MovieDetails;
+import com.example.jonathannguyen.moviesapp.ui.MovieDetails.MovieDetails;
 
 public class NotificationUtils {
     private static final int ADD_TO_FAVOURITES_PENDING_INTENT_ID = 3418;

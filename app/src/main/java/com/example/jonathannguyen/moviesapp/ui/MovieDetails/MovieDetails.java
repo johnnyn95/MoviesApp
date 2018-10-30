@@ -1,4 +1,4 @@
-package com.example.jonathannguyen.moviesapp.ui;
+package com.example.jonathannguyen.moviesapp.ui.MovieDetails;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
@@ -109,6 +109,9 @@ public class MovieDetails extends AppCompatActivity {
         trailersLabel = findViewById(R.id.trailersLabel);
         reviewsLabel = findViewById(R.id.reviewsLabel);
         favourite = findViewById(R.id.movieDetailsFavourite);
+        if(getIntent().getBooleanExtra(getString(R.string.EXTRA_CALLED_FROM_FAVOURITES),false)){
+            favourite.setVisibility(View.INVISIBLE);
+        }
     }
     private void setMovie(final Movies movie) {
         movieTitle.setText(movie.getTitle());

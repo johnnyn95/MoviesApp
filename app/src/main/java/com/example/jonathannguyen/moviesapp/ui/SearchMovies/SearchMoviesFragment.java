@@ -20,9 +20,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -31,7 +28,7 @@ import android.widget.ImageButton;
 
 import com.example.jonathannguyen.moviesapp.R;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
-import com.example.jonathannguyen.moviesapp.ui.MovieDetails;
+import com.example.jonathannguyen.moviesapp.ui.MovieDetails.MovieDetails;
 import com.example.jonathannguyen.moviesapp.ui.MoviesAdapter;
 import com.example.jonathannguyen.moviesapp.ui.MoviesAdapterOnClickHandler;
 

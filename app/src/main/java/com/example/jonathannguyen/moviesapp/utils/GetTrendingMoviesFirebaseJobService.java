@@ -2,6 +2,7 @@ package com.example.jonathannguyen.moviesapp.utils;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.firebase.jobdispatcher.JobParameters;
 import com.firebase.jobdispatcher.JobService;
@@ -15,6 +16,7 @@ public class GetTrendingMoviesFirebaseJobService extends JobService {
             protected Object doInBackground(Object[] objects) {
                 Context context = GetTrendingMoviesFirebaseJobService.this;
                 GetTrendingMoviesTask.executeTask(getApplication(),GetTrendingMoviesTask.ACTION_GET_TRENDING_MOVIES);
+                Log.d("joblog",String.valueOf(System.currentTimeMillis()));
                 return null;
             }
 

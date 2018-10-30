@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 
 import com.example.jonathannguyen.moviesapp.R;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
-import com.example.jonathannguyen.moviesapp.ui.MovieDetails;
+import com.example.jonathannguyen.moviesapp.ui.MovieDetails.MovieDetails;
 import com.example.jonathannguyen.moviesapp.ui.MoviesAdapter;
 import com.example.jonathannguyen.moviesapp.ui.MoviesAdapterOnClickHandler;
 
