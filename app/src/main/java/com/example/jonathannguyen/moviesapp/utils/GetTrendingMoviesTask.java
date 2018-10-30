@@ -46,28 +46,6 @@ public class GetTrendingMoviesTask {
                 notificationManager.cancelAll();
                 break;
         }
-//        if(action == ACTION_GET_TRENDING_MOVIES){
-//            AsyncTask<Void,Void,List<Movies>> getTrendingMoviesAsyncTask = new AsyncTask<Void, Void, List<Movies>>() {
-//                List<Movies> result;
-//                @Override
-//                protected List<Movies> doInBackground(Void... voids) {
-//                    moviesRepositoryApi.getPopularMovies(new OnGetMoviesCallback() {
-//                        @Override
-//                        public void onSuccess(List<Movies> movies) {
-//                            trendingMovies = movies;
-//                            NotificationUtils.notifyUser(application.getBaseContext(),getRandomMovie(trendingMovies));
-//                        }
-//
-//                        @Override
-//                        public void onError() {
-//                            Log.d(GetTrendingMoviesTask.class.toString(),"Failed to fetch movie from Trending service!");
-//                        }
-//                    });
-//                    return result;
-//                }
-//            };
-//            getTrendingMoviesAsyncTask.execute();
-//        }
     }
 
     private static Movies getRandomMovie(List<Movies> movies){
@@ -83,11 +61,13 @@ public class GetTrendingMoviesTask {
     private static void getTrendingMovie(final Application application){
         AsyncTask<Void,Void,List<Movies>> getTrendingMoviesAsyncTask = new AsyncTask<Void, Void, List<Movies>>() {
             List<Movies> result;
+            Random random = new Random();
+            int randomNum = random.nextInt(5);
             @Override
             protected List<Movies> doInBackground(Void... voids) {
                 moviesRepositoryApi = moviesRepositoryApi.getInstance(application);
                 moviesRepositoryDb = moviesRepositoryDb.getInstance(application);
-                moviesRepositoryApi.getPopularMovies(new OnGetMoviesCallback() {
+                moviesRepositoryApi.getPopularMoviesNextPage(new OnGetMoviesCallback() {
                     @Override
                     public void onSuccess(List<Movies> movies) {
                         Movies randomMovie = getRandomMovie(movies);
@@ -105,7 +85,7 @@ public class GetTrendingMoviesTask {
                     public void onError() {
                         Log.d(GetTrendingMoviesTask.class.toString(),"Failed to fetch movie from Trending service!");
                     }
-                });
+                },randomNum);
                 return result;
             }
         };

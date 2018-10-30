@@ -14,7 +14,7 @@ import com.firebase.jobdispatcher.Trigger;
 import java.util.concurrent.TimeUnit;
 
 public class Scheduler {
-    private static final int REMINDER_INTERVAL_MINUTES = 1;
+    private static final int REMINDER_INTERVAL_MINUTES = 60;
     private static final int REMINDER_INTERVAL_SECONDS = (int) (TimeUnit.MINUTES.toSeconds(REMINDER_INTERVAL_MINUTES));
     private static final int SYNC_FLEXTIME_SECONDS = REMINDER_INTERVAL_SECONDS;
     private static final String TRENDING_JOB_TAG = "trending_movies_tag";
