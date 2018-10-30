@@ -31,12 +31,20 @@
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax" />
 
-
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="parallax" />
+                app:layout_collapseMode="parallax">
+                <ImageButton
+                    android:id="@+id/movieDetailsFavourite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/favourite"
+                    android:scaleType="fitXY"
+                    app:layout_collapseMode="parallax"
+                    android:layout_gravity="top|right"/>
+            </android.support.v7.widget.Toolbar>>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 

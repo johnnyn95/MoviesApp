@@ -7,12 +7,16 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -25,6 +29,7 @@ import com.example.jonathannguyen.moviesapp.api.model.Genres;
 import com.example.jonathannguyen.moviesapp.api.model.Movies;
 import com.example.jonathannguyen.moviesapp.api.model.Reviews;
 import com.example.jonathannguyen.moviesapp.api.model.Trailers;
+import com.example.jonathannguyen.moviesapp.repository.MoviesRepositoryDb;
 import com.example.jonathannguyen.moviesapp.ui.PopularMovies.PopularMoviesViewModel;
 
 import java.util.ArrayList;
@@ -33,7 +38,7 @@ import java.util.List;
 public class MovieDetails extends AppCompatActivity {
 
     private PopularMoviesViewModel popularMoviesViewModel;
-
+    MoviesRepositoryDb moviesRepositoryDb;
     private static String IMAGE_BASE_URL = "http://image.tmdb.org/t/p/w780";
     private static String YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v=%s";
     private static String YOUTUBE_THUMBNAIL_URL = "http://img.youtube.com/vi/%s/0.jpg";
@@ -49,6 +54,9 @@ public class MovieDetails extends AppCompatActivity {
     private LinearLayout movieReviews;
     private TextView trailersLabel;
     private TextView reviewsLabel;
+    private ImageButton favourite;
+    Movies movie;
+    List<Integer> genreIds = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,7 @@ public class MovieDetails extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable Movies movies) {
                 setMovie(popularMoviesViewModel.getmMovieDetails().getValue());
+                movie = popularMoviesViewModel.getmMovieDetails().getValue();
             }
         });
         popularMoviesViewModel.getmTrailers().observe(this, new Observer<List<Trailers>>(){
@@ -81,6 +90,7 @@ public class MovieDetails extends AppCompatActivity {
                 setMovieReviews(reviews);
             }
         });
+
         popularMoviesViewModel.getMovieDetails(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
         popularMoviesViewModel.getMovieTrailers(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
         popularMoviesViewModel.getMovieReviews(getIntent().getIntExtra(getString(R.string.EXTRA_MOVIE_ID),0));
@@ -98,8 +108,9 @@ public class MovieDetails extends AppCompatActivity {
         movieReviews = findViewById(R.id.movieReviews);
         trailersLabel = findViewById(R.id.trailersLabel);
         reviewsLabel = findViewById(R.id.reviewsLabel);
+        favourite = findViewById(R.id.movieDetailsFavourite);
     }
-    private void setMovie(Movies movie) {
+    private void setMovie(final Movies movie) {
         movieTitle.setText(movie.getTitle());
         movieOverviewLabel.setVisibility(View.VISIBLE);
         movieOverview.setText(movie.getOverview());
@@ -117,10 +128,28 @@ public class MovieDetails extends AppCompatActivity {
                     .apply(RequestOptions.placeholderOf(R.color.colorPrimary))
                     .into(movieBackdrop);
         }
+        favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                moviesRepositoryDb = moviesRepositoryDb.getInstance(getApplication());
+                if(!moviesRepositoryDb.checkIfMovieIsInFavourites(movie)){
+                    addMovieToFavourites(movie);
+                    Snackbar snackbar = Snackbar.make(v, R.string.movie_added, Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null);
+                    View sbView = snackbar.getView();
+                    sbView.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.colorSuccess));
+                    snackbar.show();
+                } else {
+                    Snackbar snackbar = Snackbar.make(v, R.string.movie_duplicate, Snackbar.LENGTH_SHORT)
+                            .setAction("Action", null);
+                    View sbView = snackbar.getView();
+                    sbView.setBackgroundColor(ContextCompat.getColor(getBaseContext(), R.color.colorAccent));
+                    snackbar.show();
+                }
+            }
+        });
         trailersLabel.setVisibility(View.VISIBLE);
         movieTrailers.removeAllViews();
-
-
     }
     private void setMovieTrailers(List<Trailers> trailers){
         for (final Trailers trailer : trailers) {
@@ -174,4 +203,22 @@ public class MovieDetails extends AppCompatActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    private void addMovieToFavourites(final Movies movie){
+        AsyncTask<Void,Void,Void> addToFavouritesAsyncTask = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                moviesRepositoryDb = moviesRepositoryDb.getInstance(getApplication());
+                for (Genres genres: movie.getGenres()) {
+                    genreIds.add(genres.getId());
+                }
+                movie.setGenreIds(genreIds);
+                moviesRepositoryDb.addMovieToFavourites(movie);
+                return null;
+            }
+        };
+        addToFavouritesAsyncTask.execute();
+    }
+
+
 }

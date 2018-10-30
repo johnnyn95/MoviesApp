@@ -107,6 +107,19 @@ public class PopularMoviesViewModel extends AndroidViewModel  {
                 Log.d(MoviesRepositoryApi.class.toString(),"Failed to fetch movie");
             }
         });
+        moviesRepositoryApi.getGenres(new OnGetGenresCallback() {
+            @Override
+            public void onSuccess(List<Genres> genres) {
+                if(genres != null)
+                mGenres.postValue(genres);
+            }
+
+            @Override
+            public void onError() {
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to fetch genres");
+            }
+        });
+
     }
 
     public void getMovieTrailers(int movieId){
