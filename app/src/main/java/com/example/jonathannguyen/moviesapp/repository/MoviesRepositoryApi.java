@@ -4,6 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.jonathannguyen.moviesapp.api.OnGetReviewsCallback;
+import com.example.jonathannguyen.moviesapp.api.OnGetTotalPagesCallback;
+import com.example.jonathannguyen.moviesapp.api.OnGetTotalResultsCallback;
 import com.example.jonathannguyen.moviesapp.api.OnGetTrailersCallback;
 import com.example.jonathannguyen.moviesapp.api.model.GenresResponse;
 import com.example.jonathannguyen.moviesapp.api.OnGetGenresCallback;
@@ -197,6 +199,52 @@ public class MoviesRepositoryApi {
                     MoviesResponse moviesResponse = response.body();
                     if(moviesResponse != null && moviesResponse.getMovies() != null) {
                         callback.onSuccess(moviesResponse.getMovies());
+                    } else {
+                        callback.onError();
+                    }
+                } else {
+                    callback.onError();
+                }
+            }
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to get search movies");
+                callback.onError();
+            }
+        });
+    }
+
+    public void getSearchMoviesTotalResults(String query,final OnGetTotalResultsCallback callback){
+        theMovieDbService.getSearchMovies(API_KEY,LANGUAGE,1,query).enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                if(response.isSuccessful()){
+                    MoviesResponse moviesResponse = response.body();
+                    if(moviesResponse != null && moviesResponse.getMovies() != null) {
+                        callback.onSuccess(moviesResponse.getTotalResults());
+                    } else {
+                        callback.onError();
+                    }
+                } else {
+                    callback.onError();
+                }
+            }
+            @Override
+            public void onFailure(Call<MoviesResponse> call, Throwable t) {
+                Log.d(MoviesRepositoryApi.class.toString(),"Failed to get search movies");
+                callback.onError();
+            }
+        });
+    }
+
+    public void getSearchMoviesTotalPages(String query,final OnGetTotalPagesCallback callback){
+        theMovieDbService.getSearchMovies(API_KEY,LANGUAGE,1,query).enqueue(new Callback<MoviesResponse>() {
+            @Override
+            public void onResponse(Call<MoviesResponse> call, Response<MoviesResponse> response) {
+                if(response.isSuccessful()){
+                    MoviesResponse moviesResponse = response.body();
+                    if(moviesResponse != null && moviesResponse.getMovies() != null) {
+                        callback.onSuccess(moviesResponse.getTotalPages());
                     } else {
                         callback.onError();
                     }

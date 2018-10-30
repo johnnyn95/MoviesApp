@@ -111,6 +111,11 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                 adapter.setMovies(movies);
                 adapter.setAllGenres(searchMoviesViewModel.getmGenres().getValue());
                 recyclerView.setAdapter(adapter);
+
+                if(searchMoviesViewModel.getmLastPosition().getValue() != null){
+                    recyclerView.scrollToPosition(searchMoviesViewModel.getmLastPosition().getValue());
+                }
+
                 if(getLinearLayoutManager(recyclerView).getChildCount() < 1){
                     fab.show();
                     recyclerView.setPadding(0,20,0,0);
@@ -145,6 +150,7 @@ public class SearchMoviesFragment extends Fragment implements MoviesAdapterOnCli
                     pastVisiblesItems = getLinearLayoutManager(recyclerView).findFirstVisibleItemPosition();
                     if (loading)
                     {
+                        if(!(totalItemCount == searchMoviesViewModel.totalResultsFromQuery))
                         if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount)
                         {
                             loading = false;

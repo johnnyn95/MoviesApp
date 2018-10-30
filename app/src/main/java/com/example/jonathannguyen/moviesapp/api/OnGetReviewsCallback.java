@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface OnGetReviewsCallback {
     void onSuccess(List<Reviews> reviews);
-
     void onError();
 }

@@ -51,7 +51,7 @@ public class FavouriteMoviesFragment extends Fragment implements FavouriteMovies
                 Snackbar snackbar = Snackbar.make(getView(), R.string.all_movies_removed, Snackbar.LENGTH_SHORT)
                         .setAction("Action", null);
                 View sbView = snackbar.getView();
-                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorAccent));
+                sbView.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.colorSuccess));
                 snackbar.show();
 
         }

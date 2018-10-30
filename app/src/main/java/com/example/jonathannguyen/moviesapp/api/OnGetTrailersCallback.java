@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface OnGetTrailersCallback {
     void onSuccess(List<Trailers> trailers);
-
     void onError();
 }
